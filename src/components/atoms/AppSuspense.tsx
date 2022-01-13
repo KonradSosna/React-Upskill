@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Grid } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 
 export default function Suspense() {
   return (
@@ -7,6 +7,9 @@ export default function Suspense() {
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
+        <Typography variant="h4" component="div" gutterBottom>
+          loading...
+        </Typography>
         <CircularProgress />
       </Box>
     </Grid>
