@@ -1,12 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import DefaultLayout from './layout/Default';
-import AppSuspense from './components/atoms/AppSuspense';
 
-const Home = React.lazy(() => import('./pages/Home'));
-const CreateInvoice = React.lazy(() => import('./pages/create'));
-const Invoices = React.lazy(() => import('./pages/invoices/[id]'));
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import AppSuspense from './components/atoms/AppSuspense';
+import DefaultLayout from './layout/Default';
+import './App.css';
+
+const Invoices = React.lazy(() => import('./pages/Invoices'));
+const Create = React.lazy(() => import('./pages/Create'));
+const Invoice = React.lazy(() => import('./pages/Invoice'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 function App() {
@@ -26,7 +28,7 @@ function App() {
             index
             element={
               <React.Suspense fallback={<AppSuspense></AppSuspense>}>
-                <Home />
+                <Invoices />
               </React.Suspense>
             }
           ></Route>
@@ -34,7 +36,7 @@ function App() {
             path="create"
             element={
               <React.Suspense fallback={<AppSuspense></AppSuspense>}>
-                <CreateInvoice />
+                <Create />
               </React.Suspense>
             }
           ></Route>
@@ -42,7 +44,7 @@ function App() {
             path="invoices/:id"
             element={
               <React.Suspense fallback={<AppSuspense></AppSuspense>}>
-                <Invoices />
+                <Invoice />
               </React.Suspense>
             }
           ></Route>

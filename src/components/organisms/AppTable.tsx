@@ -1,6 +1,9 @@
 import React from 'react';
+
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Paper,
+  styled,
   Table,
   TableBody,
   TableCell,
@@ -9,7 +12,6 @@ import {
   TableRow,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Delete, Edit } from '@mui/icons-material';
 
 export default function AppTable() {
   const rows = [
@@ -47,38 +49,55 @@ export default function AppTable() {
       amount: 1233,
     },
   ];
-  const headers = [
-    { name: 'No' },
+  interface Headers {
+    name: string;
+    align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  }
+  const headers: Headers[] = [
+    { name: 'No', align: 'inherit' },
     {
       name: 'Created',
-      alignRight: true,
+      align: 'right',
     },
     {
       name: 'Valid until',
-      alignRight: true,
+      align: 'right',
     },
     {
       name: 'Amount',
-      alignRight: true,
+      align: 'right',
     },
     {
       name: 'Actions',
-      alignRight: true,
+      align: 'right',
     },
   ];
 
+  const StyleTable = styled(Table)({
+    minWidth: '650px',
+  });
+
+  const StyledDeleteIcon = styled(Delete)({
+    margin: '0 10px',
+  });
+  const StyledEditteIcon = styled(Edit)({
+    margin: '0 10px',
+  });
+
+  const StyledTableCell = styled(TableCell)((props) => ({
+    // eslint-disable-next-line react/prop-types
+    textAlign: props.align,
+  }));
+
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <StyleTable aria-label="simple table">
         <TableHead>
           <TableRow>
             {headers.map((header) => (
-              <TableCell
-                key={header.name}
-                align={header.alignRight ? 'right' : 'inherit'}
-              >
+              <StyledTableCell key={header.name} align={header.align}>
                 {header.name}
-              </TableCell>
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -92,13 +111,13 @@ export default function AppTable() {
               <TableCell align="right">{row.validUntil}</TableCell>
               <TableCell align="right">{row.amount}</TableCell>
               <TableCell align="right">
-                <Delete sx={{ margin: '0 10px' }}></Delete>
-                <Edit sx={{ margin: '0 10px' }}></Edit>
+                <StyledDeleteIcon></StyledDeleteIcon>
+                <StyledEditteIcon></StyledEditteIcon>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </StyleTable>
     </TableContainer>
   );
 }

@@ -1,10 +1,16 @@
 import React from 'react';
-import { Box, Container } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+
+import { Box, Container, styled } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router-dom';
+
 import AppNav from '../components/molecules/AppNav';
 import theme from '../theme';
+
+const BoxStyled = styled(Box)({
+  margin: '2rem 0',
+});
 
 export default function Layout() {
   const { t } = useTranslation();
@@ -24,9 +30,9 @@ export default function Layout() {
       <AppNav navigation={navigation}></AppNav>
       <main>
         <Container>
-          <Box sx={{ my: 4 }}>
+          <BoxStyled>
             <Outlet />
-          </Box>
+          </BoxStyled>
         </Container>
       </main>
     </ThemeProvider>

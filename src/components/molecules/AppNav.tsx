@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
-import { AppBar, Box, Button, Menu, MenuItem, Toolbar } from '@mui/material';
-import AppLink from '../atoms/AppLink';
-import i18n from '../../i18n';
+
 import TranslateIcon from '@mui/icons-material/Translate';
+import {
+  AppBar,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Toolbar,
+  styled,
+} from '@mui/material';
+
+import i18n from '../../i18n';
+import AppLink from '../atoms/AppLink';
 
 interface Nav {
   to: string;
@@ -35,6 +45,17 @@ export default function AppNav(props: { navigation: Nav[] }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const StyledBox = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    margin: '0 20px',
+  });
+
+  const StyledButton = styled(Button)({
+    color: 'white',
+  });
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -46,19 +67,18 @@ export default function AppNav(props: { navigation: Nav[] }) {
             exact
           ></AppLink>
         ))}
-        <Box sx={{ display: 'flex', alignItems: 'center', margin: '0 20px' }}>
+        <StyledBox>
           <TranslateIcon></TranslateIcon>
-          <Button
+          <StyledButton
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            sx={{ color: 'white' }}
           >
             {lang.name}
-          </Button>
-        </Box>
+          </StyledButton>
+        </StyledBox>
         <Menu
           anchorEl={anchorEl}
           id="basic-menu"

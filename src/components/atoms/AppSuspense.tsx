@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 
 export default function Suspense() {

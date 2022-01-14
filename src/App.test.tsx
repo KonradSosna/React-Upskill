@@ -1,13 +1,14 @@
 /* eslint-disable testing-library/no-node-access */
 import React from 'react';
+
 import { render, screen, waitFor } from '@testing-library/react';
+
 import App from './App';
 
 describe('Testin App component', () => {
   test('render Suspens component', () => {
     render(<App></App>);
-    const loading = screen.getByText('loading...');
-    expect(loading).toBeInTheDocument();
+    expect(screen.getByText('loading...')).toBeInTheDocument();
   });
 
   test('render layout navigation', () => {
