@@ -3,7 +3,7 @@ import React from 'react';
 import { styled } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
-const StyledLink = styled(NavLink)`
+const StyledLink = styled(NavLink)<{ isActive: boolean }>`
   text-decoration: none;
 
   &:focus,
@@ -32,6 +32,7 @@ export default function AppLink(props: {
 
   return (
     <StyledLink
+      isActive={isActive}
       style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
       {...props}
     >
