@@ -32,6 +32,7 @@ export default function AppLink(props: {
 
   return (
     <StyledLink
+      // eslint-disable-next-line no-undef
       isActive={isActive}
       style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
       {...props}
