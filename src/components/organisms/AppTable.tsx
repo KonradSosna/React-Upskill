@@ -13,66 +13,15 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-export default function AppTable() {
-  const rows = [
-    {
-      number: 1,
-      created: '22/4/202',
-      validUntil: '6/12/21',
-      amount: 1233,
-    },
-    {
-      number: 2,
-      created: '22/4/202',
-      validUntil: '6/12/21',
-      amount: 1233,
-      props: {
-        align: 'right',
-      },
-    },
-    {
-      number: 3,
-      created: '22/4/202',
-      validUntil: '6/12/21',
-      amount: 1233,
-    },
-    {
-      number: 4,
-      created: '22/4/202',
-      validUntil: '6/12/21',
-      amount: 1233,
-    },
-    {
-      number: 5,
-      created: '22/4/202',
-      validUntil: '6/12/21',
-      amount: 1233,
-    },
-  ];
-  interface Headers {
-    name: string;
-    align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
-  }
-  const headers: Headers[] = [
-    { name: 'No', align: 'inherit' },
-    {
-      name: 'Created',
-      align: 'right',
-    },
-    {
-      name: 'Valid until',
-      align: 'right',
-    },
-    {
-      name: 'Amount',
-      align: 'right',
-    },
-    {
-      name: 'Actions',
-      align: 'right',
-    },
-  ];
+import { Invoice, Headers } from '../../intefaces/invoices';
 
+export default function AppTable({
+  list,
+  headers,
+}: {
+  list: Invoice[];
+  headers: Headers[];
+}) {
   const StyleTable = styled(Table)({
     minWidth: '650px',
   });
@@ -102,14 +51,13 @@ export default function AppTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.number}>
+          {list.map((invoice) => (
+            <TableRow key={invoice.id}>
               <TableCell component="th" scope="row">
-                <Link to={`invoices/${row.number}`}>{row.number}</Link>
+                <Link to={`invoices/${invoice.id}`}>{invoice.number}</Link>
               </TableCell>
-              <TableCell align="right">{row.created}</TableCell>
-              <TableCell align="right">{row.validUntil}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell align="right">{invoice.createdDate}</TableCell>
+              <TableCell align="right">{invoice.validDate}</TableCell>
               <TableCell align="right">
                 <StyledDeleteIcon></StyledDeleteIcon>
                 <StyledEditteIcon></StyledEditteIcon>

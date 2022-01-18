@@ -5,7 +5,9 @@ import { ThemeProvider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
+import AppProgressBar from '../components/atoms/AppProgressBar';
 import AppNav from '../components/molecules/AppNav';
+import useProgressInterceptor from '../hooks/useProgressInterceptor';
 import theme from '../theme';
 
 const BoxStyled = styled(Box)({
@@ -14,6 +16,7 @@ const BoxStyled = styled(Box)({
 
 export default function Layout() {
   const { t } = useTranslation();
+  const loading = useProgressInterceptor();
   const navigation = [
     {
       to: '/',
@@ -27,6 +30,7 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
+      <AppProgressBar loading={loading}></AppProgressBar>
       <AppNav navigation={navigation}></AppNav>
       <main>
         <Container>

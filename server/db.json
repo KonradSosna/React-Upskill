@@ -1,0 +1,186 @@
+{
+    "invoices": [
+      {
+        "id": "b4044cd9-5953-498e-83e3-2c2a7fb6d717",
+        "number": "20/2022",
+        "createdDate": "2022-03-24T02:51:56.504Z",
+        "validDate": "2022-01-05T11:18:14.169Z",
+        "recipient": {
+          "companyName": "Test Company",
+          "city": "Ustrzyki Dolne",
+          "street": "Gombrowicza",
+          "postcode": "38-700",
+          "nip": "523 047 86 53",
+          "phone": "500100200",
+          "email": "test@gmail.com",
+          "bankAccount": "55 1020 1909 3868 8738 5139 0913"
+        },
+        "sender": {
+          "companyName": "Sender",
+          "city": "Wroclaw",
+          "street": "Poniatowskiego",
+          "postcode": "01-200",
+          "nip": "701 193 81 27",
+          "phone": "123123123",
+          "email": "sender@gmail.com",
+          "bankAccount": "51 1020 1909 3868 8738 5139 0913"
+        },
+        "items": [
+          {
+            "id": "a784ea0c-761b-40e6-a964-04ff8e6f8296",
+            "name": "Test",
+            "amount": 1,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "23"
+          },
+          {
+            "id": "a785ea0c-761b-40e6-a964-04ff8e6f8296",
+            "name": "Test2",
+            "amount": 1,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "23"
+          }
+        ]
+      },
+      {
+        "id": "d5b8f74a-94ad-4923-be05-1958a91ac673",
+        "number": "11/2022",
+        "createdDate": "2021-08-03T22:08:00.000Z",
+        "validDate": "2021-08-04T22:08:00.000Z",
+        "recipient": {
+          "companyName": "Test",
+          "city": "Rzeszow",
+          "street": "Piastowska 40/11",
+          "postcode": "10-100",
+          "nip": "523 047 86 53",
+          "phoneNumber": "",
+          "email": "test@gmail.com",
+          "bankAccount": "62 1090 1014 0000 0712 1981 2874",
+          "phone": "602 526 922"
+        },
+        "sender": {
+          "companyName": "Test2",
+          "city": "Ustrzyki Dolne",
+          "street": "Gombrowicza 23/27",
+          "postcode": "38-700",
+          "nip": "701 193 81 27",
+          "phoneNumber": "",
+          "email": "slash98.pb@gmail.com",
+          "bankAccount": "61 1090 1014 0000 0712 1981 2874",
+          "phone": "536 291 645"
+        },
+        "items": [
+          {
+            "id": "eb0a498b-be44-4927-adac-c559d5046369",
+            "name": "Carrot",
+            "amount": 1,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "20"
+          },
+          {
+            "id": "29a633ef-3d30-4bc7-9435-2adbd4bb1763",
+            "name": "Metal",
+            "amount": 11,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "300"
+          }
+        ]
+      },
+      {
+        "id": "d5b8f74a-94ad-4923-be05-1958a91ac233",
+        "number": "10/2021",
+        "createdDate": "2021-08-03T22:08:00.000Z",
+        "validDate": "2021-08-04T22:08:00.000Z",
+        "recipient": {
+          "companyName": "Test",
+          "city": "Rzeszow",
+          "street": "Piastowska 40/11",
+          "postcode": "10-100",
+          "nip": "523 047 86 53",
+          "phoneNumber": "",
+          "email": "test@gmail.com",
+          "bankAccount": "62 1090 1014 0000 0712 1981 2874",
+          "phone": "602 526 922"
+        },
+        "sender": {
+          "companyName": "Test2",
+          "city": "Ustrzyki Dolne",
+          "street": "Gombrowicza 23/27",
+          "postcode": "38-700",
+          "nip": "701 193 81 27",
+          "phoneNumber": "",
+          "email": "slash98.pb@gmail.com",
+          "bankAccount": "61 1090 1014 0000 0712 1981 2874",
+          "phone": "536 291 645"
+        },
+        "items": [
+          {
+            "id": "eb0a498b-be44-4927-adac-c559d5046369",
+            "name": "Carrot",
+            "amount": 1,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "20"
+          },
+          {
+            "id": "29a633ef-3d30-4bc7-9435-2adbd4bb1763",
+            "name": "Metal",
+            "amount": 11,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "300"
+          }
+        ]
+      },
+      {
+        "id": "d5b8f74a-94ad-4923-be05-1958a91ac613",
+        "number": "01/2021",
+        "createdDate": "2021-08-03T22:08:00.000Z",
+        "validDate": "2021-08-04T22:08:00.000Z",
+        "recipient": {
+          "companyName": "Test",
+          "city": "Rzeszow",
+          "street": "Piastowska 40/11",
+          "postcode": "10-100",
+          "nip": "523 047 86 53",
+          "phoneNumber": "",
+          "email": "test@gmail.com",
+          "bankAccount": "62 1090 1014 0000 0712 1981 2874",
+          "phone": "602 526 922"
+        },
+        "sender": {
+          "companyName": "Test2",
+          "city": "Ustrzyki Dolne",
+          "street": "Gombrowicza 23/27",
+          "postcode": "38-700",
+          "nip": "701 193 81 27",
+          "phoneNumber": "",
+          "email": "slash98.pb@gmail.com",
+          "bankAccount": "61 1090 1014 0000 0712 1981 2874",
+          "phone": "536 291 645"
+        },
+        "items": [
+          {
+            "id": "eb0a498b-be44-4927-adac-c559d5046369",
+            "name": "Carrot",
+            "amount": 1,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "20"
+          },
+          {
+            "id": "29a633ef-3d30-4bc7-9435-2adbd4bb1763",
+            "name": "Metal",
+            "amount": 11,
+            "unit": "szt.",
+            "tax": 23,
+            "price": "300"
+          }
+        ]
+      }
+    ]
+  }

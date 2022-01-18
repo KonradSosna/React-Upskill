@@ -14,10 +14,6 @@ const StyledLink = styled(NavLink)`
   }
 `;
 
-export default function AppLink(props: {
-  to: string;
-  label: string;
-  exact: boolean;
-}) {
-  return <StyledLink {...props}>{props.label}</StyledLink>;
+export default function AppLink(props: { to: string; children: string }) {
+  return <StyledLink {...props} />;
 }

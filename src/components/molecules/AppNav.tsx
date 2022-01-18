@@ -60,12 +60,9 @@ export default function AppNav(props: { navigation: Nav[] }) {
     <AppBar position="static">
       <Toolbar>
         {props.navigation.map((nav) => (
-          <AppLink
-            key={nav.to}
-            label={nav.label.toUpperCase()}
-            to={nav.to}
-            exact
-          ></AppLink>
+          <AppLink key={nav.to} to={nav.to}>
+            {nav.label.toUpperCase()}
+          </AppLink>
         ))}
         <StyledBox>
           <TranslateIcon></TranslateIcon>
