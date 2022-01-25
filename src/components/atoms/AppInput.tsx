@@ -1,44 +1,33 @@
 import React from 'react';
 
 import { TextField } from '@mui/material';
+import debounce from 'lodash-es/debounce';
+
+import { FormField } from '../../store/invoiceSlice';
+
+const DELAY = 300;
 
 export default function AppInput(props: {
-  field: {
-    value: string;
-    label: string;
-    valid: boolean;
-    validationMessage: string;
-    type: 'text';
-  };
+  field: FormField;
   onFieldChange: ({ value, key }: { value: string; key: string }) => void;
 }) {
-  //   const [valid, setValid] = useState(true);
-  //   const [value, setValue] = useState<string>(props.initialValue || '');
-
-  //   const handleChange = (e: any) => setValue(e.target.value);
-
-  //   useEffect(() => {
-  //     if (props.validator) {
-  //       setValid(props.validator.validate(value));
-  //     }
-  //   }, [value, props.validator]);
-
   function handleChange({ value, key }: { value: string; key: string }) {
     props.onFieldChange({ value, key });
   }
 
+  const debouncedHandler = debounce(handleChange, DELAY);
+
   return (
     <TextField
-      value={props.field.value}
       label={props.field.label}
       variant="standard"
       onChange={(e) =>
-        handleChange({ value: e.target.value, key: props.field.label })
+        debouncedHandler({ value: e.target.value, key: props.field.key })
       }
       fullWidth
       helperText={!props.field.valid ? props.field.validationMessage : ''}
       error={!props.field.valid}
-      type={props.field.type}
+      type={props.field.type || 'text'}
     />
   );
 }

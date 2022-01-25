@@ -1,24 +1,153 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Delete } from '@mui/icons-material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  styled,
+  TextField,
+} from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 
+import AppInput from '../components/atoms/AppInput';
 import AppForm from '../components/organisms/AppForm';
+import {
+  InvoiceState,
+  updateRecipientField,
+  updateSenderField,
+  addItem,
+  removeItem,
+  updateItem,
+} from '../store/invoiceSlice';
 
 // import { useTranslation } from 'react-i18next';
 
-const ButtonsContainer = styled(Box)({
+const ButtonsGrid = styled(Grid)({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'flex-end',
+});
+
+const ButtonsBox = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'baseline',
   gap: 20,
 });
 
+const ItemsBox = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: 6,
+});
+
+const AddItemButton = styled(Box)({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  margin: '40px 0',
+});
+
+const DatesBox = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
+function ItemRow(props: { items: any[]; deleteItem: any; onFieldChange: any }) {
+  return (
+    <>
+      {props.items.map(([name, amount, unit, tax, price], index) => (
+        <Grid container spacing={4} key={index}>
+          <Grid item xs={6}>
+            <AppInput
+              field={name}
+              onFieldChange={(payload) =>
+                props.onFieldChange({ index, ...payload })
+              }
+            ></AppInput>
+          </Grid>
+          <Grid item xs={6}>
+            <ItemsBox>
+              <AppInput
+                field={amount}
+                onFieldChange={(payload) =>
+                  props.onFieldChange({ index, ...payload })
+                }
+              ></AppInput>
+              <AppInput
+                field={unit}
+                onFieldChange={(payload) =>
+                  props.onFieldChange({ index, ...payload })
+                }
+              ></AppInput>
+              <AppInput
+                field={tax}
+                onFieldChange={(payload) =>
+                  props.onFieldChange({ index, ...payload })
+                }
+              ></AppInput>
+              <AppInput
+                field={price}
+                onFieldChange={(payload) =>
+                  props.onFieldChange({ index, ...payload })
+                }
+              ></AppInput>
+              <IconButton onClick={() => props.deleteItem(index)}>
+                <Delete></Delete>
+              </IconButton>
+            </ItemsBox>
+          </Grid>
+        </Grid>
+      ))}
+    </>
+  );
+}
+
+function InvoiceForm() {
+  const recipientData = useSelector(
+    (state: { invoice: InvoiceState }) => state.invoice.recipientData
+  );
+  const senderData = useSelector(
+    (state: { invoice: InvoiceState }) => state.invoice.senderData
+  );
+  const dispatch = useDispatch();
+
+  return (
+    <Grid container spacing={4} sx={{ marginTop: 4 }}>
+      <Grid item xs={6}>
+        <AppForm
+          title="Recipient"
+          fields={recipientData}
+          onFieldChange={(payload: any) =>
+            dispatch(updateRecipientField(payload))
+          }
+        ></AppForm>
+      </Grid>
+      <Grid item xs={6}>
+        <AppForm
+          title="Sender"
+          fields={senderData}
+          onFieldChange={(payload: any) => dispatch(updateSenderField(payload))}
+        ></AppForm>
+      </Grid>
+    </Grid>
+  );
+}
+
 export default function CreateInvoice() {
   // const { t } = useTranslation();
+
+  const items = useSelector(
+    (state: { invoice: InvoiceState }) => state.invoice.items
+  );
+
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState<Date | null>(
     new Date('2014-08-18T21:11:54')
   );
@@ -27,170 +156,21 @@ export default function CreateInvoice() {
     setValue(newValue);
   };
 
-  const recipientFields = [
-    {
-      label: 'Company Name',
-      valid: true,
-      value: 'eee',
-    },
-    {
-      label: 'City',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'Street',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'Postcode',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'NIP',
-      value: '',
-      valid: true,
-      type: 'number',
-    },
-    {
-      label: 'Tel',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'E-mail',
-      value: '',
-      valid: true,
-      type: 'email',
-    },
-    {
-      label: 'Bank account',
-      value: '',
-      valid: true,
-    },
-  ];
-
-  const senderFormFields = [
-    {
-      label: 'Company Name',
-      valid: true,
-      value: 'eee',
-    },
-    {
-      label: 'City',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'Street',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'Postcode',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'NIP',
-      value: '',
-      valid: true,
-      type: 'number',
-    },
-    {
-      label: 'Tel',
-      value: '',
-      valid: true,
-    },
-    {
-      label: 'E-mail',
-      value: '',
-      valid: true,
-      type: 'email',
-    },
-    {
-      label: 'Bank account',
-      value: '',
-      valid: true,
-    },
-  ];
-
-  const [fields, setFields] = useState<any[]>(recipientFields);
-  const [senderFields, setSenderFields] = useState<any[]>(senderFormFields);
-
-  const baseItem = [
-    {
-      label: 'name',
-    },
-    {
-      label: 'amount',
-    },
-    {
-      label: 'unit',
-    },
-    {
-      label: 'tax',
-    },
-    {
-      label: 'price',
-    },
-  ];
-
-  const items: any[] = [];
-
-  function addItem() {
-    items.push(baseItem);
-  }
-
-  function onFieldChange({ value, key }: { value: string; key: string }) {
-    const copyArr = [...fields];
-
-    const updatedEl = copyArr.find((el: any) => el.label === key);
-
-    if (updatedEl) {
-      updatedEl.value = value;
-    }
-
-    setFields(copyArr);
-  }
-
-  function onSenderFieldChange({ value, key }: { value: string; key: string }) {
-    const copyArr = [...senderFields];
-
-    const updatedEl = copyArr.find((el: any) => el.label === key);
-
-    if (updatedEl) {
-      updatedEl.value = value;
-    }
-
-    setSenderFields(copyArr);
-  }
-
   return (
     <Container>
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <TextField label="No." variant="standard"></TextField>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'flex-end',
-          }}
-        >
-          <ButtonsContainer>
+        <ButtonsGrid item xs={6}>
+          <ButtonsBox>
             <Button variant="contained">Cancel</Button>
             <Button variant="contained">Save</Button>
-          </ButtonsContainer>
-        </Grid>
+          </ButtonsBox>
+        </ButtonsGrid>
         <Grid item xs={6} sx={{ marginTop: 2 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <DatesBox>
               <DesktopDatePicker
                 label="Created date"
                 inputFormat="MM/dd/yyyy"
@@ -205,66 +185,21 @@ export default function CreateInvoice() {
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
               />
-            </Box>
+            </DatesBox>
           </LocalizationProvider>
         </Grid>
       </Grid>
-      <Grid container spacing={4} sx={{ marginTop: 4 }}>
-        <Grid item xs={6}>
-          <AppForm
-            title="Recipient"
-            fields={fields}
-            onFieldChange={onFieldChange}
-          ></AppForm>
-        </Grid>
-        <Grid item xs={6}>
-          <AppForm
-            title="Sender"
-            fields={senderFields}
-            onFieldChange={onSenderFieldChange}
-          ></AppForm>
-        </Grid>
-      </Grid>
-      {items.map((item, index) => (
-        <Grid container spacing={4} key={index}>
-          <Grid item xs={6}>
-            <TextField
-              id="standard-basic"
-              label="Name"
-              variant="standard"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 6,
-              }}
-            >
-              <TextField
-                id="standard-basic"
-                label="Amount"
-                variant="standard"
-              />
-              <TextField id="standard-basic" label="Unit" variant="standard" />
-              <TextField id="standard-basic" label="Tax" variant="standard" />
-              <TextField id="standard-basic" label="Price" variant="standard" />
-              <Delete></Delete>
-            </Box>
-          </Grid>
-        </Grid>
-      ))}
-
-      <Box
-        sx={{ display: 'flex', justifyContent: 'flex-end', margin: '40px 0' }}
-      >
-        <Button variant="contained" onClick={addItem}>
+      <InvoiceForm></InvoiceForm>
+      <ItemRow
+        items={items}
+        deleteItem={(index: number) => dispatch(removeItem({ index }))}
+        onFieldChange={(payload: any) => dispatch(updateItem(payload))}
+      ></ItemRow>
+      <AddItemButton>
+        <Button variant="contained" onClick={() => dispatch(addItem())}>
           add item
         </Button>
-      </Box>
+      </AddItemButton>
     </Container>
   );
 }
