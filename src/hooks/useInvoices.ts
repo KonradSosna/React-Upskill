@@ -9,11 +9,11 @@ export default function useInvoices() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   const transformInvoiceDateField = (invoices: Invoice[]) =>
-    invoices.map((invoice: Invoice) => {
-      invoice.createdDate = formatDate(invoice.createdDate);
-      invoice.validDate = formatDate(invoice.validDate);
-      return invoice;
-    });
+    invoices.map((invoice: Invoice) => ({
+      ...invoice,
+      createdDate: formatDate(invoice.createdDate),
+      validDate: formatDate(invoice.validDate),
+    }));
 
   async function fetchInvoices() {
     const { data } = await ApiService.get('invoices');

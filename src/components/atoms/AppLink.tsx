@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { styled } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
@@ -14,6 +14,6 @@ const StyledLink = styled(NavLink)`
   }
 `;
 
-export default function AppLink(props: { to: string; children: string }) {
+export default function AppLink(props: NavLinkProps) {
   return <StyledLink {...props} />;
 }
