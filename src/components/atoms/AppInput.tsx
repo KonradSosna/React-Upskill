@@ -5,7 +5,7 @@ import debounce from 'lodash-es/debounce';
 
 import { FormField } from '../../store/invoiceSlice';
 
-const DELAY = 300;
+const DELAY = 100;
 
 export default function AppInput(props: {
   field: FormField;
@@ -27,7 +27,7 @@ export default function AppInput(props: {
       fullWidth
       helperText={!props.field.valid ? props.field.validationMessage : ''}
       error={!props.field.valid}
-      type={props.field.type || 'text'}
+      type={props.field.type}
     />
   );
 }

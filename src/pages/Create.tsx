@@ -1,32 +1,27 @@
 import React from 'react';
 
-import { Delete } from '@mui/icons-material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  styled,
-  TextField,
-} from '@mui/material';
+import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import AppInput from '../components/atoms/AppInput';
-import AppForm from '../components/organisms/AppForm';
+import InvoiceForm from '../components/invoice/InvoiceForm';
+import InvoiceItem from '../components/invoice/InvoiceItem';
 import {
   InvoiceState,
-  updateRecipientField,
-  updateSenderField,
   addItem,
   removeItem,
   updateItem,
+  setNumber,
+  setValidDate,
+  // setCreatedDate,
+  validateForm,
 } from '../store/invoiceSlice';
-
-// import { useTranslation } from 'react-i18next';
+import { INVOIEC_NUMBER_FIELD } from '../utils/defaultValues';
+import { parseDate } from '../utils/index';
 
 const ButtonsGrid = styled(Grid)({
   display: 'flex',
@@ -41,13 +36,6 @@ const ButtonsBox = styled(Box)({
   gap: 20,
 });
 
-const ItemsBox = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: 6,
-});
-
 const AddItemButton = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
@@ -59,130 +47,73 @@ const DatesBox = styled(Box)({
   justifyContent: 'space-between',
 });
 
-function ItemRow(props: { items: any[]; deleteItem: any; onFieldChange: any }) {
-  return (
-    <>
-      {props.items.map(([name, amount, unit, tax, price], index) => (
-        <Grid container spacing={4} key={index}>
-          <Grid item xs={6}>
-            <AppInput
-              field={name}
-              onFieldChange={(payload) =>
-                props.onFieldChange({ index, ...payload })
-              }
-            ></AppInput>
-          </Grid>
-          <Grid item xs={6}>
-            <ItemsBox>
-              <AppInput
-                field={amount}
-                onFieldChange={(payload) =>
-                  props.onFieldChange({ index, ...payload })
-                }
-              ></AppInput>
-              <AppInput
-                field={unit}
-                onFieldChange={(payload) =>
-                  props.onFieldChange({ index, ...payload })
-                }
-              ></AppInput>
-              <AppInput
-                field={tax}
-                onFieldChange={(payload) =>
-                  props.onFieldChange({ index, ...payload })
-                }
-              ></AppInput>
-              <AppInput
-                field={price}
-                onFieldChange={(payload) =>
-                  props.onFieldChange({ index, ...payload })
-                }
-              ></AppInput>
-              <IconButton onClick={() => props.deleteItem(index)}>
-                <Delete></Delete>
-              </IconButton>
-            </ItemsBox>
-          </Grid>
-        </Grid>
-      ))}
-    </>
-  );
-}
-
-function InvoiceForm() {
-  const recipientData = useSelector(
-    (state: { invoice: InvoiceState }) => state.invoice.recipientData
-  );
-  const senderData = useSelector(
-    (state: { invoice: InvoiceState }) => state.invoice.senderData
-  );
-  const dispatch = useDispatch();
-
-  return (
-    <Grid container spacing={4} sx={{ marginTop: 4 }}>
-      <Grid item xs={6}>
-        <AppForm
-          title="Recipient"
-          fields={recipientData}
-          onFieldChange={(payload: any) =>
-            dispatch(updateRecipientField(payload))
-          }
-        ></AppForm>
-      </Grid>
-      <Grid item xs={6}>
-        <AppForm
-          title="Sender"
-          fields={senderData}
-          onFieldChange={(payload: any) => dispatch(updateSenderField(payload))}
-        ></AppForm>
-      </Grid>
-    </Grid>
-  );
-}
-
 export default function CreateInvoice() {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const items = useSelector(
     (state: { invoice: InvoiceState }) => state.invoice.items
   );
+  // const createdDate = useSelector(
+  //   (state: { invoice: InvoiceState }) => state.invoice.createdDate
+  // );
+  const validDate = useSelector(
+    (state: { invoice: InvoiceState }) => state.invoice.validDate
+  );
+  // const isFormValid = useSelector(
+  //   (state: { invoice: InvoiceState }) => state.invoice.isFormValid
+  // );
 
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54')
-  );
-
-  const handleChange = (newValue: Date | null) => {
-    setValue(newValue);
-  };
+  const [value, setValue] = React.useState<Date | null>(null);
 
   return (
     <Container>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <TextField label="No." variant="standard"></TextField>
+          <AppInput
+            field={INVOIEC_NUMBER_FIELD}
+            onFieldChange={({ value }: { value: string }) =>
+              dispatch(setNumber({ number: value }))
+            }
+          ></AppInput>
         </Grid>
         <ButtonsGrid item xs={6}>
           <ButtonsBox>
-            <Button variant="contained">Cancel</Button>
-            <Button variant="contained">Save</Button>
+            <Button variant="contained">{t('commons.cancel')}</Button>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(validateForm())}
+            >
+              {t('commons.save')}
+            </Button>
           </ButtonsBox>
         </ButtonsGrid>
         <Grid item xs={6} sx={{ marginTop: 2 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatesBox>
-              <DesktopDatePicker
-                label="Created date"
-                inputFormat="MM/dd/yyyy"
+              <DatePicker
+                label={t('invoice.form.createdDate')}
                 value={value}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
+                inputFormat="MM/dd/yyyy"
+                onChange={(date: any) => {
+                  setValue(date);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    error={!value}
+                    helperText={params?.inputProps?.placeholder}
+                  />
+                )}
               />
-              <DesktopDatePicker
-                label="Valid until date"
+              <DatePicker
+                label={t('invoice.form.validUntilDate')}
                 inputFormat="MM/dd/yyyy"
-                value={value}
-                onChange={handleChange}
+                value={validDate}
+                onChange={(date: any) =>
+                  dispatch(setValidDate({ validDate: parseDate(date) }))
+                }
                 renderInput={(params) => <TextField {...params} />}
               />
             </DatesBox>
@@ -190,14 +121,14 @@ export default function CreateInvoice() {
         </Grid>
       </Grid>
       <InvoiceForm></InvoiceForm>
-      <ItemRow
+      <InvoiceItem
         items={items}
         deleteItem={(index: number) => dispatch(removeItem({ index }))}
         onFieldChange={(payload: any) => dispatch(updateItem(payload))}
-      ></ItemRow>
+      ></InvoiceItem>
       <AddItemButton>
         <Button variant="contained" onClick={() => dispatch(addItem())}>
-          add item
+          {t('commons.addItem')}
         </Button>
       </AddItemButton>
     </Container>
