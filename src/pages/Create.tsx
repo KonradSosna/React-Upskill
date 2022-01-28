@@ -4,6 +4,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
+import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -17,11 +18,10 @@ import {
   updateItem,
   setNumber,
   setValidDate,
-  // setCreatedDate,
+  setCreatedDate,
   validateForm,
 } from '../store/invoiceSlice';
-import { INVOIEC_NUMBER_FIELD } from '../utils/defaultValues';
-import { parseDate } from '../utils/index';
+import { isValidDate, parseDate } from '../utils/index';
 
 const ButtonsGrid = styled(Grid)({
   display: 'flex',
@@ -50,28 +50,46 @@ const DatesBox = styled(Box)({
 export default function CreateInvoice() {
   const { t } = useTranslation();
 
-  const items = useSelector(
-    (state: { invoice: InvoiceState }) => state.invoice.items
+  const state = useSelector(
+    (state: { invoice: InvoiceState }) => state.invoice
   );
-  // const createdDate = useSelector(
-  //   (state: { invoice: InvoiceState }) => state.invoice.createdDate
-  // );
-  const validDate = useSelector(
-    (state: { invoice: InvoiceState }) => state.invoice.validDate
+
+  const createdDateComputed = createSelector(
+    (state: InvoiceState) => state.createdDate,
+    (dateAsString: string | null) =>
+      dateAsString ? new Date(dateAsString) : null
   );
-  // const isFormValid = useSelector(
-  //   (state: { invoice: InvoiceState }) => state.invoice.isFormValid
-  // );
+
+  const validDateComputed = createSelector(
+    (state: InvoiceState) => state.validDate,
+    (dateAsString: string | null) =>
+      dateAsString ? new Date(dateAsString) : null
+  );
 
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState<Date | null>(null);
+
+  function onCreatedDateChange(date: Date | null) {
+    if (isValidDate(date)) {
+      dispatch(setCreatedDate({ createdDate: parseDate(date) }));
+    } else {
+      dispatch(setCreatedDate({ createdDate: null }));
+    }
+  }
+
+  function onValidDateChange(date: Date | null) {
+    if (isValidDate(date)) {
+      dispatch(setValidDate({ validDate: parseDate(date) }));
+    } else {
+      dispatch(setValidDate({ validDate: null }));
+    }
+  }
 
   return (
     <Container>
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <AppInput
-            field={INVOIEC_NUMBER_FIELD}
+            field={state.invoiceNumber}
             onFieldChange={({ value }: { value: string }) =>
               dispatch(setNumber({ number: value }))
             }
@@ -93,28 +111,30 @@ export default function CreateInvoice() {
             <DatesBox>
               <DatePicker
                 label={t('invoice.form.createdDate')}
-                value={value}
+                value={createdDateComputed(state)}
                 inputFormat="MM/dd/yyyy"
-                onChange={(date: any) => {
-                  setValue(date);
-                }}
+                onChange={onCreatedDateChange}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     required
-                    error={!value}
+                    error={!createdDateComputed(state)}
                     helperText={params?.inputProps?.placeholder}
                   />
                 )}
               />
               <DatePicker
                 label={t('invoice.form.validUntilDate')}
-                inputFormat="MM/dd/yyyy"
-                value={validDate}
-                onChange={(date: any) =>
-                  dispatch(setValidDate({ validDate: parseDate(date) }))
-                }
-                renderInput={(params) => <TextField {...params} />}
+                value={validDateComputed(state)}
+                onChange={onValidDateChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    error={!validDateComputed(state)}
+                    helperText={params?.inputProps?.placeholder}
+                  />
+                )}
               />
             </DatesBox>
           </LocalizationProvider>
@@ -122,7 +142,7 @@ export default function CreateInvoice() {
       </Grid>
       <InvoiceForm></InvoiceForm>
       <InvoiceItem
-        items={items}
+        items={state.items}
         deleteItem={(index: number) => dispatch(removeItem({ index }))}
         onFieldChange={(payload: any) => dispatch(updateItem(payload))}
       ></InvoiceItem>

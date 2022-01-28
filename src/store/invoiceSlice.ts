@@ -22,7 +22,7 @@ export interface InvoiceState {
   items: FormField[][];
   invoiceNumber: FormField;
   createdDate: string | null;
-  validDate: string;
+  validDate: string | null;
   isFormValid: boolean;
 }
 
@@ -37,15 +37,15 @@ function createInitialDates() {
   };
 }
 
-const { validDate } = createInitialDates();
+const { createdDate, validDate } = createInitialDates();
 
 const initialState: InvoiceState = {
   senderData: INVOICE_USER_FIELDS,
   recipientData: INVOICE_USER_FIELDS,
   items: [],
   invoiceNumber: INVOIEC_NUMBER_FIELD,
-  createdDate: null,
-  validDate,
+  createdDate: createdDate,
+  validDate: validDate,
   isFormValid: false,
 };
 
@@ -97,10 +97,10 @@ export const invoiceSlice = createSlice({
       state.invoiceNumber.value = action.payload.number;
       state.invoiceNumber.valid = !!action.payload.number;
     },
-    setCreatedDate: (state, action: PayloadAction<{ createdDate: string }>) => {
+    setCreatedDate: (state, action: PayloadAction<{ createdDate: any }>) => {
       state.createdDate = action.payload.createdDate;
     },
-    setValidDate: (state, action: PayloadAction<{ validDate: string }>) => {
+    setValidDate: (state, action: PayloadAction<{ validDate: any }>) => {
       state.validDate = action.payload.validDate;
     },
     validateForm: (state) => {
@@ -122,8 +122,16 @@ export const invoiceSlice = createSlice({
         })
         .every((field: FormField) => !!field.value);
 
+      if (!state.invoiceNumber.value) {
+        state.invoiceNumber.valid = false;
+      }
+
       state.isFormValid =
-        isRecipientDataValid && isSenderDataValid && !!state.createdDate;
+        isRecipientDataValid &&
+        isSenderDataValid &&
+        !!state.createdDate &&
+        !!state.validDate &&
+        !!state.invoiceNumber.value;
     },
   },
 });
