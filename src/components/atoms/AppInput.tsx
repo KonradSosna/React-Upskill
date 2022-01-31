@@ -2,6 +2,7 @@ import React from 'react';
 
 import { TextField } from '@mui/material';
 import debounce from 'lodash-es/debounce';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '../../store/invoiceSlice';
 
@@ -11,6 +12,7 @@ export default function AppInput(props: {
   field: FormField;
   onFieldChange: ({ value, key }: { value: string; key: string }) => void;
 }) {
+  const { t } = useTranslation();
   function handleChange({ value, key }: { value: string; key: string }) {
     props.onFieldChange({ value, key });
   }
@@ -19,13 +21,14 @@ export default function AppInput(props: {
 
   return (
     <TextField
-      label={props.field.label}
+      label={t(props.field.label)}
       variant="standard"
       onChange={(e) =>
         debouncedHandler({ value: e.target.value, key: props.field.key })
       }
       fullWidth
-      helperText={!props.field.valid ? props.field.validationMessage : ''}
+      required={!!props.field.validationMessage}
+      helperText={!props.field.valid ? t(props.field.validationMessage) : ''}
       error={!props.field.valid}
       type={props.field.type}
     />

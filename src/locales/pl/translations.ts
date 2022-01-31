@@ -24,6 +24,16 @@ const translations = {
       createdDate: 'Data utworzenia',
       validUntilDate: 'Data wazności',
       number: 'Numer',
+      name: 'Nazwa',
+      amount: 'Ilość',
+      unit: 'Jednostka',
+      tax: 'VAT',
+      price: 'Cena',
+      no: 'Numer',
+    },
+    validations: {
+      itemRequired: 'Przynajmniej jeden item jest wymagany',
+      fieldRequired: 'Pole jest wymagane',
     },
   },
 };

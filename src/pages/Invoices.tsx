@@ -45,7 +45,7 @@ const TableSkeleton = ({
 };
 
 export default function Home() {
-  const invoices = useInvoices();
+  const { invoices } = useInvoices();
 
   return (
     <>

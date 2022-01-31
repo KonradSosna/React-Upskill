@@ -9,6 +9,9 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    info: {
+      main: '#ccc',
+    },
   },
 });
 

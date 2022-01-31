@@ -24,6 +24,16 @@ const translations = {
       createdDate: 'Created date',
       validUntilDate: 'Valid until date',
       number: 'No.',
+      name: 'Name',
+      amount: 'Amount',
+      unit: 'Unit',
+      tax: 'Tax',
+      price: 'Price',
+      no: 'No.',
+    },
+    validations: {
+      itemRequired: 'At least one item is required',
+      fieldRequired: 'Field is required',
     },
   },
 };

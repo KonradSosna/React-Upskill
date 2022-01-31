@@ -9,6 +9,7 @@ import {
 
 interface Validator {
   [key: string]: (value: string) => boolean;
+  default: (value: string) => boolean;
 }
 
 const validator: Validator = {
@@ -16,10 +17,8 @@ const validator: Validator = {
   nip: validateNIP,
   phone: validatePhoneNumber,
   bankAccount: validateBankAccountNumber,
-  companyName: validateTextField,
-  city: validateTextField,
-  street: validateTextField,
   postcode: validatePostCode,
+  default: validateTextField,
 };
 
 export default validator;

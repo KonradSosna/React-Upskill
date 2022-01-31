@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   INVOICE_ITEM_FIELDS,
@@ -12,8 +12,17 @@ export interface FormField {
   valid: boolean;
   value: string;
   type: string;
-  validationMessage?: string;
+  validationMessage: string;
   key: string;
+}
+
+export interface InvoiceItem {
+  id: number;
+  name: string;
+  amount: number;
+  unit: string;
+  tax: number;
+  price: number;
 }
 
 export interface InvoiceState {
@@ -24,6 +33,7 @@ export interface InvoiceState {
   createdDate: string | null;
   validDate: string | null;
   isFormValid: boolean;
+  showError: boolean;
 }
 
 function createInitialDates() {
@@ -47,10 +57,13 @@ const initialState: InvoiceState = {
   createdDate: createdDate,
   validDate: validDate,
   isFormValid: false,
+  showError: false,
 };
 
 function validateField(field: FormField) {
-  return (field.valid = validator[field.key](field.value));
+  return validator[field.key]
+    ? validator[field.key](field.value)
+    : validator.default(field.value);
 }
 
 function updateField(
@@ -58,10 +71,22 @@ function updateField(
   payload: { value: string; key: string }
 ) {
   const field = list.find((item: FormField) => item.key === payload.key);
+
   if (field) {
     field.value = payload.value;
     field.valid = validateField(field);
   }
+}
+
+function validateFormFieldList(list: FormField[]) {
+  return list
+    .map((field: FormField) => {
+      if (!field.value) {
+        field.valid = false;
+      }
+      return field;
+    })
+    .every((field: FormField) => !!field.value);
 }
 
 export const invoiceSlice = createSlice({
@@ -104,37 +129,92 @@ export const invoiceSlice = createSlice({
       state.validDate = action.payload.validDate;
     },
     validateForm: (state) => {
-      const isRecipientDataValid = state.recipientData
-        .map((field: FormField) => {
-          if (!field.value) {
-            field.valid = false;
-          }
-
-          return field;
-        })
-        .every((field: FormField) => !!field.value);
-      const isSenderDataValid = state.senderData
-        .map((field: FormField) => {
-          if (!field.value) {
-            field.valid = false;
-          }
-          return field;
-        })
-        .every((field: FormField) => !!field.value);
+      const isRecipientDataValid = validateFormFieldList(state.recipientData);
+      const isSenderDataValid = validateFormFieldList(state.senderData);
 
       if (!state.invoiceNumber.value) {
         state.invoiceNumber.valid = false;
       }
 
+      const itemsAreValid = state.items.length
+        ? state.items.every((list: FormField[]) => validateFormFieldList(list))
+        : false;
+
+      state.showError = true;
+
       state.isFormValid =
         isRecipientDataValid &&
         isSenderDataValid &&
+        itemsAreValid &&
         !!state.createdDate &&
         !!state.validDate &&
-        !!state.invoiceNumber.value;
+        !!state.invoiceNumber.value &&
+        !!state.items.length;
+    },
+    setShowError: (state, action: PayloadAction<{ show: boolean }>) => {
+      state.showError = action.payload.show;
     },
   },
 });
+
+const selectors = {
+  selectCreatedDate: createSelector(
+    (state: InvoiceState) => state.createdDate,
+    (dateAsString: string | null) =>
+      dateAsString ? new Date(dateAsString) : null
+  ),
+  selectValidDate: createSelector(
+    (state: InvoiceState) => state.validDate,
+    (dateAsString: string | null) =>
+      dateAsString ? new Date(dateAsString) : null
+  ),
+  selectRecipient: createSelector(
+    (state: InvoiceState) => state.recipientData,
+    (list: FormField[]) => {
+      const recipient: { [key: string]: string } = {};
+      list.forEach((item: FormField) => {
+        recipient[item.key] = item.value;
+      });
+      return recipient;
+    }
+  ),
+  selectSender: createSelector(
+    (state: InvoiceState) => state.senderData,
+    (list: FormField[]) => {
+      const sender: { [key: string]: string } = {};
+      list.forEach((item: FormField) => {
+        sender[item.key] = item.value;
+      });
+      return sender;
+    }
+  ),
+  selectItems: createSelector(
+    (state: InvoiceState) => state.items,
+    (items: FormField[][]) => {
+      const newItems: InvoiceItem[] = [];
+      items.forEach((list: FormField[], index: number) => {
+        const [name, amount, unit, tax, price] = list;
+        newItems.push({
+          id: index,
+          name: name.value,
+          amount: +amount.value,
+          unit: unit.value,
+          tax: +tax.value,
+          price: +price.value,
+        });
+        return newItems;
+      });
+    }
+  ),
+};
+
+export const {
+  selectCreatedDate,
+  selectItems,
+  selectRecipient,
+  selectSender,
+  selectValidDate,
+} = selectors;
 
 // Action creators are generated for each case reducer function
 export const {
@@ -147,6 +227,7 @@ export const {
   setCreatedDate,
   setValidDate,
   validateForm,
+  setShowError,
 } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

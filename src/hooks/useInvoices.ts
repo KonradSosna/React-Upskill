@@ -25,5 +25,5 @@ export default function useInvoices() {
     fetchInvoices();
   }, []);
 
-  return invoices;
+  return { invoices };
 }

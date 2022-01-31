@@ -1,16 +1,26 @@
 import React from 'react';
 
+import SaveIcon from '@mui/icons-material/Save';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
-import { createSelector } from '@reduxjs/toolkit';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  styled,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import AppInput from '../components/atoms/AppInput';
 import InvoiceForm from '../components/invoice/InvoiceForm';
-import InvoiceItem from '../components/invoice/InvoiceItem';
+import InvoiceItems from '../components/invoice/InvoiceItems';
+import useInvoice from '../hooks/useInvoice';
 import {
   InvoiceState,
   addItem,
@@ -19,7 +29,11 @@ import {
   setNumber,
   setValidDate,
   setCreatedDate,
-  validateForm,
+  selectCreatedDate,
+  selectValidDate,
+  selectItems,
+  selectRecipient,
+  selectSender,
 } from '../store/invoiceSlice';
 import { isValidDate, parseDate } from '../utils/index';
 
@@ -32,7 +46,7 @@ const ButtonsGrid = styled(Grid)({
 const ButtonsBox = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
-  alignItems: 'baseline',
+  alignItems: 'center',
   gap: 20,
 });
 
@@ -40,6 +54,7 @@ const AddItemButton = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
   margin: '40px 0',
+  alignItems: 'center',
 });
 
 const DatesBox = styled(Box)({
@@ -48,25 +63,20 @@ const DatesBox = styled(Box)({
 });
 
 export default function CreateInvoice() {
+  const navigate = useNavigate();
+  const { createInvoice } = useInvoice();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const state = useSelector(
     (state: { invoice: InvoiceState }) => state.invoice
   );
 
-  const createdDateComputed = createSelector(
-    (state: InvoiceState) => state.createdDate,
-    (dateAsString: string | null) =>
-      dateAsString ? new Date(dateAsString) : null
-  );
-
-  const validDateComputed = createSelector(
-    (state: InvoiceState) => state.validDate,
-    (dateAsString: string | null) =>
-      dateAsString ? new Date(dateAsString) : null
-  );
-
-  const dispatch = useDispatch();
+  const createdDate = selectCreatedDate(state);
+  const validDate = selectValidDate(state);
+  const recipient = selectRecipient(state);
+  const sender = selectSender(state);
+  const items = selectItems(state);
 
   function onCreatedDateChange(date: Date | null) {
     if (isValidDate(date)) {
@@ -84,6 +94,17 @@ export default function CreateInvoice() {
     }
   }
 
+  function createNewInvoice() {
+    createInvoice({
+      number: state.invoiceNumber.value,
+      createdDate: state.createdDate,
+      validDate: state.validDate,
+      recipient,
+      sender,
+      items,
+    });
+  }
+
   return (
     <Container>
       <Grid container spacing={4}>
@@ -97,10 +118,18 @@ export default function CreateInvoice() {
         </Grid>
         <ButtonsGrid item xs={6}>
           <ButtonsBox>
-            <Button variant="contained">{t('commons.cancel')}</Button>
             <Button
+              color="info"
               variant="contained"
-              onClick={() => dispatch(validateForm())}
+              onClick={() => navigate('/')}
+            >
+              {t('commons.cancel')}
+            </Button>
+            <Button
+              color="info"
+              variant="contained"
+              startIcon={<SaveIcon />}
+              onClick={createNewInvoice}
             >
               {t('commons.save')}
             </Button>
@@ -111,27 +140,27 @@ export default function CreateInvoice() {
             <DatesBox>
               <DatePicker
                 label={t('invoice.form.createdDate')}
-                value={createdDateComputed(state)}
+                value={createdDate}
                 inputFormat="MM/dd/yyyy"
                 onChange={onCreatedDateChange}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     required
-                    error={!createdDateComputed(state)}
+                    error={!createdDate}
                     helperText={params?.inputProps?.placeholder}
                   />
                 )}
               />
               <DatePicker
                 label={t('invoice.form.validUntilDate')}
-                value={validDateComputed(state)}
+                value={validDate}
                 onChange={onValidDateChange}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     required
-                    error={!validDateComputed(state)}
+                    error={!validDate}
                     helperText={params?.inputProps?.placeholder}
                   />
                 )}
@@ -141,12 +170,19 @@ export default function CreateInvoice() {
         </Grid>
       </Grid>
       <InvoiceForm></InvoiceForm>
-      <InvoiceItem
+      <InvoiceItems
         items={state.items}
         deleteItem={(index: number) => dispatch(removeItem({ index }))}
         onFieldChange={(payload: any) => dispatch(updateItem(payload))}
-      ></InvoiceItem>
+      ></InvoiceItems>
       <AddItemButton>
+        {!state.items.length && state.showError && (
+          <Box m={2}>
+            <Typography component="span" color="red">
+              {t('invoice.validations.itemRequired')}
+            </Typography>
+          </Box>
+        )}
         <Button variant="contained" onClick={() => dispatch(addItem())}>
           {t('commons.addItem')}
         </Button>
