@@ -1,36 +1,46 @@
 import React from 'react';
 
 import { TextField } from '@mui/material';
-import debounce from 'lodash-es/debounce';
-import { useTranslation } from 'react-i18next';
+import { useController, Control } from 'react-hook-form';
 
-import { FormField } from '../../store/invoiceSlice';
-
-const DELAY = 100;
-
-export default function AppInput(props: {
-  field: FormField;
-  onFieldChange: ({ value, key }: { value: string; key: string }) => void;
+export default function AppInput({
+  control,
+  name,
+  label,
+  rules,
+  type,
+  fieldKey,
+}: {
+  control: Control;
+  name: string;
+  label: string;
+  type: string;
+  fieldKey: string;
+  rules: any;
 }) {
-  const { t } = useTranslation();
-  function handleChange({ value, key }: { value: string; key: string }) {
-    props.onFieldChange({ value, key });
-  }
-
-  const debouncedHandler = debounce(handleChange, DELAY);
+  const {
+    field,
+    formState: { errors },
+  } = useController({
+    name,
+    control,
+    rules,
+    defaultValue: '',
+  });
 
   return (
     <TextField
-      label={t(props.field.label)}
-      variant="standard"
-      onChange={(e) =>
-        debouncedHandler({ value: e.target.value, key: props.field.key })
-      }
       fullWidth
-      required={!!props.field.validationMessage}
-      helperText={!props.field.valid ? t(props.field.validationMessage) : ''}
-      error={!props.field.valid}
-      type={props.field.type}
+      type={type}
+      variant="standard"
+      label={label}
+      onChange={field.onChange}
+      onBlur={field.onBlur}
+      value={field.value}
+      name={name}
+      inputRef={field.ref}
+      error={!!errors[fieldKey]}
+      helperText={errors[fieldKey] ? errors[fieldKey].message : ''}
     />
   );
 }

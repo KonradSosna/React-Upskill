@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Delete } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
@@ -9,33 +10,26 @@ import {
   Button,
   Container,
   Grid,
+  IconButton,
   styled,
   TextField,
-  Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import AppInput from '../components/atoms/AppInput';
-import InvoiceForm from '../components/invoice/InvoiceForm';
-import InvoiceItems from '../components/invoice/InvoiceItems';
+import AppForm from '../components/organisms/AppForm';
 import useInvoice from '../hooks/useInvoice';
 import {
-  InvoiceState,
-  addItem,
-  removeItem,
-  updateItem,
-  setNumber,
-  setValidDate,
-  setCreatedDate,
-  selectCreatedDate,
-  selectValidDate,
-  selectItems,
-  selectRecipient,
-  selectSender,
-} from '../store/invoiceSlice';
-import { isValidDate, parseDate } from '../utils/index';
+  INVOICE_USER_FIELDS,
+  INVOIEC_NUMBER_FIELD,
+} from '../utils/defaultValues';
+
+const ItemsBox = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: 6,
+});
 
 const ButtonsGrid = styled(Grid)({
   display: 'flex',
@@ -63,130 +57,169 @@ const DatesBox = styled(Box)({
 });
 
 export default function CreateInvoice() {
-  const navigate = useNavigate();
-  const { createInvoice } = useInvoice();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
-  const state = useSelector(
-    (state: { invoice: InvoiceState }) => state.invoice
-  );
-
-  const createdDate = selectCreatedDate(state);
-  const validDate = selectValidDate(state);
-  const recipient = selectRecipient(state);
-  const sender = selectSender(state);
-  const items = selectItems(state);
-
-  function onCreatedDateChange(date: Date | null) {
-    if (isValidDate(date)) {
-      dispatch(setCreatedDate({ createdDate: parseDate(date) }));
-    } else {
-      dispatch(setCreatedDate({ createdDate: null }));
-    }
-  }
-
-  function onValidDateChange(date: Date | null) {
-    if (isValidDate(date)) {
-      dispatch(setValidDate({ validDate: parseDate(date) }));
-    } else {
-      dispatch(setValidDate({ validDate: null }));
-    }
-  }
-
-  function createNewInvoice() {
-    createInvoice({
-      number: state.invoiceNumber.value,
-      createdDate: state.createdDate,
-      validDate: state.validDate,
-      recipient,
-      sender,
-      items,
-    });
-  }
+  const {
+    dates,
+    onCreatedDateChange,
+    onValidDateChange,
+    addItem,
+    handleSubmit,
+    onSubmit,
+    control,
+    navigate,
+    items,
+    removeItem,
+  } = useInvoice();
 
   return (
-    <Container>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <AppInput
-            field={state.invoiceNumber}
-            onFieldChange={({ value }: { value: string }) =>
-              dispatch(setNumber({ number: value }))
-            }
-          ></AppInput>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Container>
+        <Grid container spacing={4}>
+          <Grid item xs={6}>
+            <AppInput
+              control={control}
+              label={t('invoice.form.no')}
+              name={INVOIEC_NUMBER_FIELD.key}
+              fieldKey={INVOIEC_NUMBER_FIELD.key}
+              rules={INVOIEC_NUMBER_FIELD.rules}
+              type={INVOIEC_NUMBER_FIELD.type}
+            ></AppInput>
+          </Grid>
+          <ButtonsGrid item xs={6}>
+            <ButtonsBox>
+              <Button
+                color="info"
+                variant="contained"
+                onClick={() => navigate('/')}
+              >
+                {t('commons.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                color="info"
+                variant="contained"
+                startIcon={<SaveIcon />}
+              >
+                {t('commons.save')}
+              </Button>
+            </ButtonsBox>
+          </ButtonsGrid>
+          <Grid item xs={6} sx={{ marginTop: 2 }}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatesBox>
+                <DatePicker
+                  label={t('invoice.form.createdDate')}
+                  value={dates.created}
+                  inputFormat="MM/dd/yyyy"
+                  onChange={onCreatedDateChange}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      name="createdDate"
+                      required
+                      error={!dates.created}
+                      helperText={params?.inputProps?.placeholder}
+                    />
+                  )}
+                />
+                <DatePicker
+                  label={t('invoice.form.validUntilDate')}
+                  value={dates.valid}
+                  onChange={onValidDateChange}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required
+                      error={!dates.valid}
+                      helperText={params?.inputProps?.placeholder}
+                    />
+                  )}
+                />
+              </DatesBox>
+            </LocalizationProvider>
+          </Grid>
         </Grid>
-        <ButtonsGrid item xs={6}>
-          <ButtonsBox>
-            <Button
-              color="info"
-              variant="contained"
-              onClick={() => navigate('/')}
-            >
-              {t('commons.cancel')}
-            </Button>
-            <Button
-              color="info"
-              variant="contained"
-              startIcon={<SaveIcon />}
-              onClick={createNewInvoice}
-            >
-              {t('commons.save')}
-            </Button>
-          </ButtonsBox>
-        </ButtonsGrid>
-        <Grid item xs={6} sx={{ marginTop: 2 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatesBox>
-              <DatePicker
-                label={t('invoice.form.createdDate')}
-                value={createdDate}
-                inputFormat="MM/dd/yyyy"
-                onChange={onCreatedDateChange}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    required
-                    error={!createdDate}
-                    helperText={params?.inputProps?.placeholder}
-                  />
-                )}
-              />
-              <DatePicker
-                label={t('invoice.form.validUntilDate')}
-                value={validDate}
-                onChange={onValidDateChange}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    required
-                    error={!validDate}
-                    helperText={params?.inputProps?.placeholder}
-                  />
-                )}
-              />
-            </DatesBox>
-          </LocalizationProvider>
+        <Grid container spacing={4} sx={{ marginTop: 4 }}>
+          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <AppForm
+              control={control}
+              title={t('invoice.recipient')}
+              fields={INVOICE_USER_FIELDS}
+            ></AppForm>
+          </Grid>
+          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <AppForm
+              control={control}
+              title={t('invoice.sender')}
+              fields={INVOICE_USER_FIELDS}
+            ></AppForm>
+          </Grid>
         </Grid>
-      </Grid>
-      <InvoiceForm></InvoiceForm>
-      <InvoiceItems
-        items={state.items}
-        deleteItem={(index: number) => dispatch(removeItem({ index }))}
-        onFieldChange={(payload: any) => dispatch(updateItem(payload))}
-      ></InvoiceItems>
-      <AddItemButton>
-        {!state.items.length && state.showError && (
-          <Box m={2}>
-            <Typography component="span" color="red">
-              {t('invoice.validations.itemRequired')}
-            </Typography>
-          </Box>
-        )}
-        <Button variant="contained" onClick={() => dispatch(addItem())}>
-          {t('commons.addItem')}
-        </Button>
-      </AddItemButton>
-    </Container>
+
+        {items.map(([name, amount, unit, tax, price], index) => (
+          <Grid container spacing={4} key={index}>
+            <Grid item xs={6}>
+              <AppInput
+                key={name.key}
+                control={control}
+                label={t(name.label)}
+                rules={name.rules}
+                type={name.type}
+                name={`${index}-${name.key}`}
+                fieldKey={`${index}-${name.key}`}
+              ></AppInput>
+            </Grid>
+            <Grid item xs={6}>
+              <ItemsBox>
+                <AppInput
+                  key={amount.key}
+                  control={control}
+                  label={t(amount.label)}
+                  rules={amount.rules}
+                  type={amount.type}
+                  name={`${index}-${amount.key}`}
+                  fieldKey={`${index}-${amount.key}`}
+                ></AppInput>
+                <AppInput
+                  key={unit.key}
+                  control={control}
+                  label={t(unit.label)}
+                  rules={unit.rules}
+                  type={unit.type}
+                  name={`${index}-${unit.key}`}
+                  fieldKey={`${index}-${unit.key}`}
+                ></AppInput>
+                <AppInput
+                  key={tax.key}
+                  control={control}
+                  label={t(tax.label)}
+                  rules={tax.rules}
+                  type={tax.type}
+                  name={`${index}-${unit.key}`}
+                  fieldKey={`${index}-${unit.key}`}
+                ></AppInput>
+                <AppInput
+                  key={price.key}
+                  control={control}
+                  label={t(price.label)}
+                  rules={price.rules}
+                  type={price.type}
+                  name={`${index}-${price.key}`}
+                  fieldKey={`${index}-${price.key}`}
+                ></AppInput>
+                <IconButton onClick={() => removeItem(index)}>
+                  <Delete></Delete>
+                </IconButton>
+              </ItemsBox>
+            </Grid>
+          </Grid>
+        ))}
+        <AddItemButton>
+          <Button variant="contained" onClick={addItem}>
+            {t('commons.addItem')}
+          </Button>
+        </AddItemButton>
+      </Container>
+    </form>
   );
 }

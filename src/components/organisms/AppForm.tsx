@@ -1,23 +1,36 @@
 import React from 'react';
 
 import { Typography } from '@mui/material';
+import { Control } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { FormField } from '../../store/invoiceSlice';
+import { FormField } from '../../hooks/useInvoice';
 import AppInput from '../atoms/AppInput';
 
-export default function AppForm(props: {
+export default function AppForm({
+  fields,
+  title,
+  control,
+}: {
   fields: FormField[];
-  onFieldChange: any;
   title: string;
+  control: Control;
 }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <Typography variant="h2">{props.title}</Typography>
-      {props.fields.map((field: FormField) => (
+      <Typography variant="h2">{title}</Typography>
+
+      {fields.map((item: FormField) => (
         <AppInput
-          key={field.label}
-          field={field}
-          onFieldChange={props.onFieldChange}
+          key={item.key}
+          fieldKey={`${title.toLocaleLowerCase()}-${item.key}`}
+          control={control}
+          label={t(item.label)}
+          rules={item.rules}
+          type={item.type}
+          name={`${title.toLocaleLowerCase()}-${item.key}`}
         />
       ))}
     </>
