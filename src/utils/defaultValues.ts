@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { FormField } from '../hooks/useInvoice';
+import { FormField } from '../intefaces/invoices';
 import { regexpValidation } from './validations';
 
 export const INVOICE_USER_FIELDS = [
@@ -43,7 +43,7 @@ export const INVOICE_USER_FIELDS = [
     label: 'invoice.form.nip',
     value: '',
     valid: true,
-    type: 'number',
+    type: 'text',
     key: 'nip',
     rules: yup.string().min(10).max(10).required(),
   },
@@ -95,7 +95,7 @@ export const INVOICE_ITEM_FIELDS = [
     label: 'invoice.form.amount',
     value: '',
     valid: true,
-    type: 'number',
+    type: 'text',
     key: 'amount',
     rules: yup.string().required(),
   },
@@ -111,7 +111,7 @@ export const INVOICE_ITEM_FIELDS = [
     label: 'invoice.form.tax',
     value: '',
     valid: true,
-    type: 'number',
+    type: 'text',
     key: 'tax',
     rules: yup.string().required(),
   },
@@ -119,7 +119,7 @@ export const INVOICE_ITEM_FIELDS = [
     label: 'invoice.form.price',
     value: '',
     valid: true,
-    type: 'number',
+    type: 'text',
     key: 'price',
     rules: yup.string().required(),
   },

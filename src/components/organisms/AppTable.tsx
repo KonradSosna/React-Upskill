@@ -10,33 +10,38 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  IconButton,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Invoice, Headers } from '../../intefaces/invoices';
+
+const StyleTable = styled(Table)({
+  minWidth: '650px',
+});
+
+const StyledDeleteIcon = styled(Delete)({
+  margin: '0 10px',
+});
+const StyledEditteIcon = styled(Edit)({
+  margin: '0 10px',
+});
+
+const StyledTableCell = styled(TableCell)((props) => ({
+  // eslint-disable-next-line react/prop-types
+  textAlign: props.align,
+}));
 
 export default function AppTable({
   list,
   headers,
+  deleteInvoice,
 }: {
   list: Invoice[];
   headers: Headers[];
+  deleteInvoice: (id: string | number) => void;
 }) {
-  const StyleTable = styled(Table)({
-    minWidth: '650px',
-  });
-
-  const StyledDeleteIcon = styled(Delete)({
-    margin: '0 10px',
-  });
-  const StyledEditteIcon = styled(Edit)({
-    margin: '0 10px',
-  });
-
-  const StyledTableCell = styled(TableCell)((props) => ({
-    // eslint-disable-next-line react/prop-types
-    textAlign: props.align,
-  }));
+  const navigate = useNavigate();
 
   return (
     <TableContainer component={Paper}>
@@ -59,8 +64,12 @@ export default function AppTable({
               <TableCell align="right">{invoice.createdDate}</TableCell>
               <TableCell align="right">{invoice.validDate}</TableCell>
               <TableCell align="right">
-                <StyledDeleteIcon></StyledDeleteIcon>
-                <StyledEditteIcon></StyledEditteIcon>
+                <IconButton onClick={() => deleteInvoice(invoice.id)}>
+                  <StyledDeleteIcon></StyledDeleteIcon>
+                </IconButton>
+                <IconButton onClick={() => navigate(`invoices/${invoice.id}`)}>
+                  <StyledEditteIcon></StyledEditteIcon>
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}

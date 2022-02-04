@@ -17,6 +17,7 @@ export default function AppInput({
   type: string;
   fieldKey: string;
   rules: any;
+  defaultValue?: string;
 }) {
   const {
     field,

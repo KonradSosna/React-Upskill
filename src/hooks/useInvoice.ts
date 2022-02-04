@@ -5,8 +5,15 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { FormDates, FormField } from '../intefaces/invoices';
 import ApiService from '../services/api';
-import { isValidDate, parseDate } from '../utils';
+import {
+  formatDate,
+  isValidDate,
+  parseDate,
+  transformItems,
+  transformUserFields,
+} from '../utils';
 import {
   createInitialDates,
   createValidationSchema,
@@ -14,82 +21,19 @@ import {
 } from '../utils/defaultValues';
 import { useYupValidationResolver } from './useYupValidation';
 
-export interface FormDates {
-  created: Date | null;
-  valid: Date | null;
-}
-export interface FormField {
-  rules: any;
-  label: string;
-  valid: boolean;
-  value: string;
-  type: string;
-  key: string;
-}
-
-export interface Recipient {
-  companyName: string;
-  city: string;
-  street: string;
-  postcode: string;
-  nip: number | string;
-  phone: string;
-  email: string;
-  bankAccount: string;
-  [key: string]: string | number;
-}
-
-export interface Sender extends Recipient {}
-
-export interface Item {
-  id: string;
-  name: string;
-  amount: number | string;
-  unit: string;
-  tax: number | string;
-  price: number | string;
-}
-export interface Invoice {
-  id: string | number;
-  number: string;
-  createdDate: string | null;
-  validDate: string | null;
-  recipient: {
-    companyName: string;
-    city: string;
-    street: string;
-    postcode: string;
-    nip: number | string;
-    phone: string;
-    email: string;
-    bankAccount: string;
-  };
-  sender: {
-    companyName: string;
-    city: string;
-    street: string;
-    postcode: string;
-    nip: number | string;
-    phone: string;
-    email: string;
-    bankAccount: string;
-  };
-  items: Item[];
-}
-
 const { createdDate, validDate } = createInitialDates();
 
 export default function useInvoice() {
   const navigate = useNavigate();
 
   const [dates, setDates] = useState<FormDates>({
-    created: createdDate,
-    valid: validDate,
+    created: createdDate.toISOString(),
+    valid: validDate.toISOString(),
   });
 
   const validationSchema = createValidationSchema();
   const resolver = useYupValidationResolver(yup.object(validationSchema));
-  const { handleSubmit, control } = useForm({ resolver });
+  const { handleSubmit, control, reset } = useForm({ resolver });
 
   const [items, setItems] = useState<FormField[][]>([]);
 
@@ -105,7 +49,7 @@ export default function useInvoice() {
 
   function onCreatedDateChange(date: Date | null) {
     if (isValidDate(date)) {
-      setDates({ ...dates, created: date });
+      setDates({ ...dates, created: date?.toISOString() });
     } else {
       setDates({ ...dates, created: null });
     }
@@ -113,66 +57,22 @@ export default function useInvoice() {
 
   function onValidDateChange(date: Date | null) {
     if (isValidDate(date)) {
-      setDates({ ...dates, valid: date });
+      setDates({ ...dates, valid: date?.toISOString() });
     } else {
       setDates({ ...dates, valid: null });
     }
   }
 
-  const onSubmit = async (data: any) => {
-    const recipient: Recipient = {
-      companyName: '',
-      city: '',
-      street: '',
-      postcode: '',
-      nip: 0,
-      phone: '',
-      email: '',
-      bankAccount: '',
-    };
-    const sender: Sender = {
-      companyName: '',
-      city: '',
-      street: '',
-      postcode: '',
-      nip: 0,
-      phone: '',
-      email: '',
-      bankAccount: '',
-    };
-
-    Object.keys(data)
-      .filter((key: string) => key.includes('recipient'))
-      .forEach((key: string) => {
-        const [, name] = key.split('-');
-        recipient[name] = data[key];
-      });
-    Object.keys(data)
-      .filter((key: string) => key.includes('sender'))
-      .forEach((key: string) => {
-        const [, name] = key.split('-');
-        sender[name] = data[key];
-      });
-
-    const itemsList: Item[] = [];
-    items.forEach((item: FormField[], index: number) => {
-      const [name, amount, unit, tax, price] = item;
-      const data: Item = {
-        name: name.value,
-        id: index + name.value,
-        amount: amount.value,
-        unit: unit.value,
-        tax: tax.value,
-        price: price.value,
-      };
-      itemsList.push(data);
-    });
+  async function onSubmit(data: any) {
+    const recipient = transformUserFields(data, 'recipient');
+    const sender = transformUserFields(data, 'sender');
+    const itemsList = transformItems(data);
 
     const invoice = {
-      id: 1,
+      id: Date.now().toString(),
       number: data.number,
-      createdDate: parseDate(dates.created),
-      validDate: parseDate(dates.valid),
+      createdDate: formatDate(dates.created),
+      validDate: formatDate(dates.valid),
       recipient,
       sender,
       items: itemsList,
@@ -185,7 +85,74 @@ export default function useInvoice() {
       console.error(error);
       throw error;
     }
-  };
+  }
+
+  async function onUpdate(data: any) {
+    const recipient = transformUserFields(data, 'recipient');
+    const sender = transformUserFields(data, 'sender');
+    const itemsList = transformItems(data);
+
+    const invoice = {
+      id: data.id,
+      number: data.number,
+      createdDate: formatDate(dates.created),
+      validDate: formatDate(dates.valid),
+      recipient,
+      sender,
+      items: itemsList,
+    };
+
+    try {
+      await ApiService.patch(`invoices/${data.id}`, invoice);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async function fetchInvoice(id: string) {
+    try {
+      const { data }: { data: any } = await ApiService.get(`invoices/${id}`);
+      const invoice: any = { ...data };
+      Object.keys(data.recipient).forEach((key: string) => {
+        invoice[`recipient-${key}`] = data.recipient[key];
+      });
+      Object.keys(data.sender).forEach((key: string) => {
+        invoice[`sender-${key}`] = data.recipient[key];
+      });
+      const itemsList: any = [];
+      data.items.forEach((item: any, index: number) => {
+        itemsList.push(INVOICE_ITEM_FIELDS);
+        Object.keys(item).forEach((key: string) => {
+          invoice[`${index}-${key}`] = item[key];
+        });
+      });
+      setItems([...itemsList]);
+
+      setDates({
+        created: parseDate(data.createdDate),
+        valid: parseDate(data.validDate),
+      });
+
+      const { sender, recipient, ...rest } = invoice;
+
+      reset(rest);
+    } catch (error) {
+      console.error(error);
+      navigate('/404');
+    }
+  }
+
+  async function deleteInvoice(id: string | number, cb: () => void) {
+    try {
+      await ApiService.delete(`invoices/${id}`);
+      cb();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
   return {
     onCreatedDateChange,
@@ -195,6 +162,10 @@ export default function useInvoice() {
     addItem,
     navigate,
     removeItem,
+    fetchInvoice,
+    onUpdate,
+    setDates,
+    deleteInvoice,
     control,
     dates,
     items,

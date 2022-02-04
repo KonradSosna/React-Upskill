@@ -24,34 +24,34 @@ import {
   INVOIEC_NUMBER_FIELD,
 } from '../utils/defaultValues';
 
-const ItemsBox = styled(Box)({
+export const ItemsBox = styled(Box)({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   gap: 6,
 });
 
-const ButtonsGrid = styled(Grid)({
+export const ButtonsGrid = styled(Grid)({
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
 });
 
-const ButtonsBox = styled(Box)({
+export const ButtonsBox = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
   gap: 20,
 });
 
-const AddItemButton = styled(Box)({
+export const AddItemButton = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
   margin: '40px 0',
   alignItems: 'center',
 });
 
-const DatesBox = styled(Box)({
+export const DatesBox = styled(Box)({
   display: 'flex',
   justifyContent: 'space-between',
 });
@@ -195,8 +195,8 @@ export default function CreateInvoice() {
                   label={t(tax.label)}
                   rules={tax.rules}
                   type={tax.type}
-                  name={`${index}-${unit.key}`}
-                  fieldKey={`${index}-${unit.key}`}
+                  name={`${index}-${tax.key}`}
+                  fieldKey={`${index}-${tax.key}`}
                 ></AppInput>
                 <AppInput
                   key={price.key}

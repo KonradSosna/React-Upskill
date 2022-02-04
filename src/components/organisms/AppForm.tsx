@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import { Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FormField } from '../../hooks/useInvoice';
+import { FormField } from '../../intefaces/invoices';
 import AppInput from '../atoms/AppInput';
 
 export default function AppForm({

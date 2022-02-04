@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 import AppTable from '../components/organisms/AppTable';
+import useInvoice from '../hooks/useInvoice';
 import useInvoices from '../hooks/useInvoices';
 import { Headers } from '../intefaces/invoices';
 import { createArrayFromNumber } from '../utils';
@@ -45,12 +46,25 @@ const TableSkeleton = ({
 };
 
 export default function Home() {
-  const { invoices } = useInvoices();
+  const { invoices, setInvoices } = useInvoices();
+  const { deleteInvoice } = useInvoice();
+
+  function deleteInvoiceHandler(id: string | number) {
+    deleteInvoice(id, () => {
+      setInvoices((invoices) =>
+        invoices.filter((invoice: any) => invoice.id !== id)
+      );
+    });
+  }
 
   return (
     <>
       {invoices.length ? (
-        <AppTable list={invoices} headers={headers}></AppTable>
+        <AppTable
+          list={invoices}
+          headers={headers}
+          deleteInvoice={deleteInvoiceHandler}
+        ></AppTable>
       ) : (
         <TableSkeleton columns={headers.length} rows={4} />
       )}

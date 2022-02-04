@@ -3,8 +3,8 @@
       {
         "id": "b4044cd9-5953-498e-83e3-2c2a7fb6d717",
         "number": "20/2022",
-        "createdDate": "2022-03-24T02:51:56.504Z",
-        "validDate": "2022-01-05T11:18:14.169Z",
+        "createdDate": "10/10/2022",
+        "validDate": "01/01/2022",
         "recipient": {
           "companyName": "Test Company",
           "city": "Ustrzyki Dolne",
@@ -47,8 +47,8 @@
       {
         "id": "d5b8f74a-94ad-4923-be05-1958a91ac673",
         "number": "11/2022",
-        "createdDate": "2021-08-03T22:08:00.000Z",
-        "validDate": "2021-08-04T22:08:00.000Z",
+        "createdDate": "05/05/2021",
+        "validDate": "06/06/2022",
         "recipient": {
           "companyName": "Test",
           "city": "Rzeszow",
@@ -93,8 +93,8 @@
       {
         "id": "d5b8f74a-94ad-4923-be05-1958a91ac233",
         "number": "10/2021",
-        "createdDate": "2021-08-03T22:08:00.000Z",
-        "validDate": "2021-08-04T22:08:00.000Z",
+        "createdDate": "07/07/2022",
+        "validDate": "02/02/2022",
         "recipient": {
           "companyName": "Test",
           "city": "Rzeszow",
@@ -139,8 +139,8 @@
       {
         "id": "d5b8f74a-94ad-4923-be05-1958a91ac613",
         "number": "01/2021",
-        "createdDate": "2021-08-03T22:08:00.000Z",
-        "validDate": "2021-08-04T22:08:00.000Z",
+        "createdDate": "04/05/2022",
+        "validDate": "05/04/2022",
         "recipient": {
           "companyName": "Test",
           "city": "Rzeszow",
