@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Delete } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
@@ -13,6 +13,7 @@ import {
   IconButton,
   styled,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -57,6 +58,7 @@ export const DatesBox = styled(Box)({
 });
 
 export default function CreateInvoice() {
+  const [formHeight, setFormHeight] = useState(0);
   const { t } = useTranslation();
   const {
     dates,
@@ -71,9 +73,18 @@ export default function CreateInvoice() {
     removeItem,
   } = useInvoice();
 
+  const formRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      setFormHeight(formRef.current.offsetHeight);
+    }
+  }, [items]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
       <Container>
+        <Typography variant="h4">Form height: {formHeight} px</Typography>
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <AppInput

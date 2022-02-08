@@ -32,49 +32,56 @@ const StyledTableCell = styled(TableCell)((props) => ({
   textAlign: props.align,
 }));
 
-export default function AppTable({
-  list,
-  headers,
-  deleteInvoice,
-}: {
-  list: Invoice[];
-  headers: Headers[];
-  deleteInvoice: (id: string | number) => void;
-}) {
-  const navigate = useNavigate();
+// eslint-disable-next-line react/display-name
+const AppTable = React.memo(
+  ({
+    list,
+    headers,
+    deleteInvoice,
+  }: {
+    list: Invoice[];
+    headers: Headers[];
+    deleteInvoice: (id: string | number) => void;
+  }) => {
+    const navigate = useNavigate();
 
-  return (
-    <TableContainer component={Paper}>
-      <StyleTable aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            {headers.map((header) => (
-              <StyledTableCell key={header.name} align={header.align}>
-                {header.name}
-              </StyledTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.map((invoice) => (
-            <TableRow key={invoice.id}>
-              <TableCell component="th" scope="row">
-                <Link to={`invoices/${invoice.id}`}>{invoice.number}</Link>
-              </TableCell>
-              <TableCell align="right">{invoice.createdDate}</TableCell>
-              <TableCell align="right">{invoice.validDate}</TableCell>
-              <TableCell align="right">
-                <IconButton onClick={() => deleteInvoice(invoice.id)}>
-                  <StyledDeleteIcon></StyledDeleteIcon>
-                </IconButton>
-                <IconButton onClick={() => navigate(`invoices/${invoice.id}`)}>
-                  <StyledEditteIcon></StyledEditteIcon>
-                </IconButton>
-              </TableCell>
+    return (
+      <TableContainer component={Paper}>
+        <StyleTable aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {headers.map((header) => (
+                <StyledTableCell key={header.name} align={header.align}>
+                  {header.name}
+                </StyledTableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </StyleTable>
-    </TableContainer>
-  );
-}
+          </TableHead>
+          <TableBody>
+            {list.map((invoice) => (
+              <TableRow key={invoice.id}>
+                <TableCell component="th" scope="row">
+                  <Link to={`invoices/${invoice.id}`}>{invoice.number}</Link>
+                </TableCell>
+                <TableCell align="right">{invoice.createdDate}</TableCell>
+                <TableCell align="right">{invoice.validDate}</TableCell>
+                <TableCell align="right">
+                  <IconButton onClick={() => deleteInvoice(invoice.id)}>
+                    <StyledDeleteIcon></StyledDeleteIcon>
+                  </IconButton>
+                  <IconButton
+                    onClick={() => navigate(`invoices/${invoice.id}`)}
+                  >
+                    <StyledEditteIcon></StyledEditteIcon>
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </StyleTable>
+      </TableContainer>
+    );
+  }
+);
+
+export default AppTable;

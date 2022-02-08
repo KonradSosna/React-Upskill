@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
@@ -49,13 +49,13 @@ export default function Home() {
   const { invoices, setInvoices } = useInvoices();
   const { deleteInvoice } = useInvoice();
 
-  function deleteInvoiceHandler(id: string | number) {
+  const deleteInvoiceHandler = useCallback((id: string | number) => {
     deleteInvoice(id, () => {
       setInvoices((invoices) =>
         invoices.filter((invoice: any) => invoice.id !== id)
       );
     });
-  }
+  }, []);
 
   return (
     <>
