@@ -11,6 +11,7 @@ export const InvoiceDatePicker = ({ control }: any) => {
       <StyledDatePicker>
         <Controller
           control={control}
+          rules={{ required: true }}
           name="createdDate"
           render={({ field: { onChange, ...restField } }) => (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -27,6 +28,7 @@ export const InvoiceDatePicker = ({ control }: any) => {
       <StyledDatePicker>
         <Controller
           control={control}
+          rules={{ required: true }}
           name="validUntilDate"
           render={({ field: { onChange, ...restField } }) => (
             <LocalizationProvider dateAdapter={AdapterDateFns}>

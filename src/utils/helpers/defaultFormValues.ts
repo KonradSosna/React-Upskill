@@ -1,8 +1,6 @@
 export const defaultFormValues = {
   id: '',
   number: '',
-  createdDate: '',
-  validDate: '',
   recipient: {
     companyName: '',
     city: '',

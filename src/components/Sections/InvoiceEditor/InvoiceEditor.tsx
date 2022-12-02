@@ -29,7 +29,6 @@ export const InvoiceEditor = ({ isEditMode }: InvoiceEditorProps) => {
 
   const handleNewInvoiceSave = () => {
     const invoiceData = methods.getValues();
-    methods.trigger();
     invoiceData.id = uuid();
     saveNewInvoice(invoiceData);
     navigate('/invoices');

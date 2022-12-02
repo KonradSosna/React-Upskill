@@ -1,7 +1,7 @@
-import { Button, AppBar, NativeSelect, FormControl, SelectChangeEvent } from '@mui/material';
-import { StyledButton, StyledButtonGroup } from './Navbar.styles';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { Button, AppBar, NativeSelect, FormControl, SelectChangeEvent } from '@mui/material';
+import { StyledButton, StyledButtonGroup } from './Navbar.styles';
 
 export const Navbar = () => {
   const navigate = useNavigate();

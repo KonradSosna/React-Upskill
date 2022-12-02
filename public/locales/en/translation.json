@@ -1,5 +1,6 @@
 {
   "footer": "Made with love in PGS Software",
+  "invoice": "invoice",
   "invoices": "invoices",
   "addInvoice": "Add invoice",
   "notFound": "Page not found",
