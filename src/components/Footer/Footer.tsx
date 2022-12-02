@@ -1,6 +1,7 @@
-import React from "react";
-import { StyledFooter } from "./Footer.styles";
+import { useTranslation } from 'react-i18next';
+import { StyledFooter } from './Footer.styles';
 
 export const Footer = () => {
-  return <StyledFooter>Made with love in PGS Software</StyledFooter>;
+  const { t } = useTranslation();
+  return <StyledFooter>{t('footer')}</StyledFooter>;
 };

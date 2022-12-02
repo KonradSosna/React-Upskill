@@ -1,6 +1,6 @@
-import { Container } from "@mui/material";
-import { BasicTable } from "./InvoicesTable";
-import { StyledInvoiceContainer } from "./InvoicesList.styles";
+import { Container } from '@mui/material';
+import { BasicTable } from './InvoicesTable';
+import { StyledInvoiceContainer } from './InvoicesList.styles';
 
 export const Invoices = () => {
   return (

@@ -1,0 +1,27 @@
+export const defaultFormValues = {
+  id: '',
+  number: '',
+  createdDate: '',
+  validDate: '',
+  recipient: {
+    companyName: '',
+    city: '',
+    street: '',
+    postalCode: '',
+    nip: '',
+    phone: '',
+    mail: '',
+    bankAccount: '',
+  },
+  sender: {
+    companyName: '',
+    city: '',
+    street: '',
+    postalCode: '',
+    nip: '',
+    phone: '',
+    mail: '',
+    bankAccount: '',
+  },
+  items: [],
+};

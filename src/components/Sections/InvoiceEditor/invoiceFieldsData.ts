@@ -1,37 +1,38 @@
-export const invoiceFields = [
-  {
-    label: "Company name",
-  },
-  {
-    label: "City",
-  },
-  {
-    label: "Street",
-  },
-  {
-    label: "Postcode",
-  },
-  {
-    label: "Nip",
-  },
-  {
-    label: "Phone",
-  },
-  {
-    label: "Mail",
-  },
-  {
-    label: "Bank account",
-  },
-];
+import { CompanyType } from '../../../models/Invoice-model';
 
-export const items = [
-  {
-    id: 1,
-    name: "Name",
-    amount: "Amount",
-    unit: "Unit",
-    tax: "Tax",
-    price: "Price",
-  },
-];
+export const invoiceFields = (type: CompanyType) => {
+  return [
+    {
+      label: 'Company name',
+      registerNames: `${type}.name`,
+    },
+    {
+      label: 'City',
+      registerNames: `${type}.city`,
+    },
+    {
+      label: 'Street',
+      registerNames: `${type}.street`,
+    },
+    {
+      label: 'Postcode',
+      registerNames: `${type}.postcode`,
+    },
+    {
+      label: 'Nip',
+      registerNames: `${type}.nip`,
+    },
+    {
+      label: 'Phone',
+      registerNames: `${type}.phone`,
+    },
+    {
+      label: 'Mail',
+      registerNames: `${type}.mail`,
+    },
+    {
+      label: 'Bank account',
+      registerNames: `${type}.bankAccount`,
+    },
+  ];
+};
