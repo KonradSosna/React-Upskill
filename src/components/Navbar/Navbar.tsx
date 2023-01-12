@@ -1,17 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
 import { Button, AppBar, NativeSelect, FormControl, SelectChangeEvent } from '@mui/material';
 import { StyledButton, StyledButtonGroup } from './Navbar.styles';
+import { Link } from 'react-router-dom';
+interface Langs {
+  [key: string]: { nativeName: string };
+}
 
 export const Navbar = () => {
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const langs: any = {
+  const langs: Langs = {
     en: { nativeName: 'English' },
     pl: { nativeName: 'Polski' },
-  };
-  const handleCreateInvoice = () => {
-    navigate('/create');
   };
 
   const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -22,14 +21,14 @@ export const Navbar = () => {
     <AppBar position="static">
       <StyledButtonGroup>
         <StyledButton>
-          <Button variant="contained" onClick={() => navigate('/invoices')}>
-            {t('invoices')}
-          </Button>
+          <Link style={{ textDecoration: 'none' }} to="/invoices">
+            <Button variant="contained">{t('invoices')}</Button>
+          </Link>
         </StyledButton>
         <StyledButton>
-          <Button variant="contained" onClick={handleCreateInvoice}>
-            {t('addInvoice')}
-          </Button>
+          <Link style={{ textDecoration: 'none' }} to="/create">
+            <Button variant="contained">{t('addInvoice')}</Button>
+          </Link>
         </StyledButton>
 
         <FormControl>
