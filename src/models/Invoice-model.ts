@@ -29,12 +29,11 @@ export type InvoiceItemProps = {
 
 export type InvoiceProps = {
   id?: string;
-  number?: string;
   createdDate?: string;
-  validDate?: string;
+  validUntilDate?: string;
   recipient?: InvoiceCompanyProps;
   sender?: InvoiceCompanyProps;
-  items?: InvoiceItemProps[];
+  item?: InvoiceItemProps[];
 };
 
 export enum CompanyType {

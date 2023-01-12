@@ -84,12 +84,74 @@
       "item": [
         {
           "name": "usługi",
-          "amount": "5",
+          "amount": 5,
           "unit": "5",
           "tax": "23",
           "price": "4"
         }
       ]
+    },
+    {
+      "id": "5b56653b-ede1-aa71-e5b5-09b24688807b",
+      "number": "",
+      "recipient": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "v@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "v"
+      },
+      "sender": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "companyName@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "companyName"
+      },
+      "items": [],
+      "no": "12",
+      "createdDate": "2023-01-05T20:40:43.000Z",
+      "validUntilDate": "2023-01-13T20:40:43.000Z",
+      "item": []
+    },
+    {
+      "id": "e74004ec-fad3-db83-919a-80da5841a76a",
+      "number": "",
+      "recipient": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "v",
+        "bankAccount": "companyName",
+        "postcode": "v"
+      },
+      "sender": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "companyName",
+        "bankAccount": "companyName",
+        "postcode": "companyName"
+      },
+      "items": [],
+      "no": "1234",
+      "createdDate": "2023-01-05T20:40:43.000Z",
+      "validUntilDate": "2023-01-13T20:40:43.000Z",
+      "item": []
     }
   ]
 }

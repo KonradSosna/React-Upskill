@@ -1,10 +1,12 @@
 import { TextField, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useFormContext } from 'react-hook-form';
-import { CompanyType, InvoiceCompanyProps } from '../../../../models/Invoice-model';
+import { CompanyType } from '../../../../models/Invoice-model';
+import { useErrorDetails } from '../../../../utils/helpers/useErrorDetails';
 import { invoiceFields } from '../invoiceFieldsData';
 
 export const Recipient = () => {
+  const { hasErrorCompanyForm } = useErrorDetails();
   const { register } = useFormContext();
 
   return (
@@ -13,13 +15,16 @@ export const Recipient = () => {
         Recipient
       </Typography>
 
-      {invoiceFields(CompanyType.RECIPIENT).map(({ label, registerNames }) => (
+      {invoiceFields(CompanyType.RECIPIENT).map(({ label, registerNames, type }) => (
         <TextField
+          type={type}
           variant="standard"
           id={label}
           label={label}
           key={label}
-          {...register(registerNames)}
+          error={hasErrorCompanyForm(registerNames)}
+          helperText={hasErrorCompanyForm(registerNames) && 'This field is required'}
+          {...register(registerNames, { required: 'This field is required' })}
         />
       ))}
     </Stack>

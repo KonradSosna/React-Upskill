@@ -1,10 +1,9 @@
 import { Button, Grid } from '@mui/material';
 
 type InvoiceButtonsProps = {
-  onSave: () => void;
   onCancel: () => void;
 };
-export const InvoiceButtons = ({ onSave, onCancel }: InvoiceButtonsProps) => {
+export const InvoiceButtons = ({ onCancel }: InvoiceButtonsProps) => {
   return (
     <>
       <Grid item xs={2}>
@@ -13,7 +12,7 @@ export const InvoiceButtons = ({ onSave, onCancel }: InvoiceButtonsProps) => {
         </Button>
       </Grid>
       <Grid item xs={2}>
-        <Button onClick={onSave} variant="contained">
+        <Button type="submit" variant="contained">
           Save
         </Button>
       </Grid>

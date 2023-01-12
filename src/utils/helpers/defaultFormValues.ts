@@ -2,7 +2,7 @@ export const defaultFormValues = {
   id: '',
   number: '',
   recipient: {
-    companyName: '',
+    name: '',
     city: '',
     street: '',
     postalCode: '',
@@ -12,7 +12,7 @@ export const defaultFormValues = {
     bankAccount: '',
   },
   sender: {
-    companyName: '',
+    name: '',
     city: '',
     street: '',
     postalCode: '',

@@ -40,6 +40,7 @@ export const Navbar = () => {
             onChange={(e: any) => {
               handleLanguageChange(e);
             }}
+            value={i18n.resolvedLanguage}
           >
             {Object.keys(langs).map((lng) => (
               <option key={lng} value={lng} disabled={i18n.resolvedLanguage === lng}>

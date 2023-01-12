@@ -13,12 +13,18 @@ export const InvoiceDatePicker = ({ control }: any) => {
           control={control}
           rules={{ required: true }}
           name="createdDate"
-          render={({ field: { onChange, ...restField } }) => (
+          render={({ field: { onChange, ...restField }, fieldState: { error } }) => (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Created date"
                 onChange={onChange}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    helperText={!!error && 'Date is required'}
+                    error={!!error}
+                  />
+                )}
                 {...restField}
               />
             </LocalizationProvider>
@@ -30,12 +36,18 @@ export const InvoiceDatePicker = ({ control }: any) => {
           control={control}
           rules={{ required: true }}
           name="validUntilDate"
-          render={({ field: { onChange, ...restField } }) => (
+          render={({ field: { onChange, ...restField }, fieldState: { error } }) => (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Valid until date"
                 onChange={onChange}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    helperText={!!error && 'Date is required'}
+                    error={!!error}
+                  />
+                )}
                 {...restField}
               />
             </LocalizationProvider>
