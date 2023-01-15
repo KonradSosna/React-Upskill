@@ -132,7 +132,7 @@
         "postalCode": "",
         "nip": "companyName",
         "phone": "companyName",
-        "mail": "v",
+        "mail": "v@wp.pl",
         "bankAccount": "companyName",
         "postcode": "v"
       },
@@ -143,7 +143,7 @@
         "postalCode": "",
         "nip": "companyName",
         "phone": "companyName",
-        "mail": "companyName",
+        "mail": "companyName@wp.pl",
         "bankAccount": "companyName",
         "postcode": "companyName"
       },

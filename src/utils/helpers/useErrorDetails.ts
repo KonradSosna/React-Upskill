@@ -1,22 +1,14 @@
 import { FieldError, useFormContext } from 'react-hook-form';
+import { CompanyType } from '../../models/Invoice-model';
 
 export const useErrorDetails = () => {
   const {
     formState: { errors },
   } = useFormContext();
 
-  const getFieldError = (errors: any, fieldName: string) => {
-    const path = fieldName.split('.');
-    let current = errors;
-    for (const key of path) {
-      if (!current[key]) return undefined;
-      current = current[key];
-    }
-    return current;
-  };
-
-  const hasErrorCompanyForm = (fieldName: string): boolean => {
-    return !!getFieldError(errors, fieldName);
+  const hasErrorCompanyForm = (type: CompanyType, fieldName: string): string => {
+    //@ts-ignore
+    return errors?.[type]?.[fieldName]?.message;
   };
 
   const errorDetails = (errors: any, index: number, fieldName: string) => {

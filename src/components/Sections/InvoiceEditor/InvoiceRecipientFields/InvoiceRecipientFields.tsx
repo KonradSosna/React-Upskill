@@ -15,18 +15,25 @@ export const Recipient = () => {
         Recipient
       </Typography>
 
-      {invoiceFields(CompanyType.RECIPIENT).map(({ label, registerNames, type }) => (
-        <TextField
-          type={type}
-          variant="standard"
-          id={label}
-          label={label}
-          key={label}
-          error={hasErrorCompanyForm(registerNames)}
-          helperText={hasErrorCompanyForm(registerNames) && 'This field is required'}
-          {...register(registerNames, { required: 'This field is required' })}
-        />
-      ))}
+      {invoiceFields.map(({ label, registerNames, type }) => {
+        const error = hasErrorCompanyForm(CompanyType.RECIPIENT, registerNames);
+
+        return (
+          <TextField
+            data-testid={`${CompanyType.RECIPIENT}.${registerNames}`}
+            type={type}
+            variant="standard"
+            id={label}
+            label={label}
+            key={label}
+            error={!!error}
+            helperText={error}
+            {...register(`${CompanyType.RECIPIENT}.${registerNames}`, {
+              required: 'This field is required',
+            })}
+          />
+        );
+      })}
     </Stack>
   );
 };

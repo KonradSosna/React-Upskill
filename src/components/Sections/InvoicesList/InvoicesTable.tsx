@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,30 +9,24 @@ import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, LinearProgress } from '@mui/material';
-import { toast } from 'react-toastify';
-import useGetInvoice from '../../../services/UseGetInvoice';
-import { Invoice } from '../../../models/Invoice-model';
-import { useNavigate } from 'react-router';
 import { formatDate } from '../../../utils/helpers/parseDate';
+import { useDeleteInvoice, useGetInvoiceData } from '../../../services/UseGetInvoice';
+import { Invoice } from '../../../models/Invoice-model';
 
 export const BasicTable = () => {
-  const { getInvoiceData, deleteInvoice, isLoading } = useGetInvoice();
-  const [invoices, setInvoices] = useState<Invoice[]>();
+  const { data, isLoading, refetch } = useGetInvoiceData();
+
+  const { deleteInv } = useDeleteInvoice();
   const navigate = useNavigate();
 
   const handleEditInvoice = (id: string) => {
-    getInvoiceData(id).then((response) => navigate('/edit', { state: { response } }));
+    navigate('/edit', { state: { id } });
   };
 
   const handleDeleteInvoice = (id: string) => {
-    deleteInvoice(id).then(() => {
-      setInvoices(invoices?.filter((invoice) => invoice.id !== id));
-    });
+    deleteInv(id);
+    refetch();
   };
-
-  useEffect(() => {
-    getInvoiceData().then((response) => setInvoices(response));
-  }, []);
 
   return (
     <>
@@ -63,7 +57,7 @@ export const BasicTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoices?.map((row) => (
+              {data?.map((row: Invoice) => (
                 <TableRow key={row.no} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {row.no}

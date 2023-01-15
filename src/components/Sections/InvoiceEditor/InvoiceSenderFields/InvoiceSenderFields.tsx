@@ -7,25 +7,31 @@ import { invoiceFields } from '../invoiceFieldsData';
 
 export const Sender = () => {
   const { hasErrorCompanyForm } = useErrorDetails();
-  const { register } = useFormContext();
+  const { register, formState } = useFormContext();
 
   return (
     <Stack>
       <Typography variant="h3" sx={{ height: 100, marginTop: '30px' }}>
         Sender
       </Typography>
-      {invoiceFields(CompanyType.SENDER).map(({ label, registerNames, type }) => (
-        <TextField
-          type={type}
-          variant="standard"
-          id={label}
-          label={label}
-          key={label}
-          error={hasErrorCompanyForm(registerNames)}
-          helperText={hasErrorCompanyForm(registerNames) && 'This field is required'}
-          {...register(registerNames, { required: 'This field is required' })}
-        />
-      ))}
+      {invoiceFields.map(({ label, registerNames, type }) => {
+        const error = hasErrorCompanyForm(CompanyType.SENDER, registerNames);
+
+        return (
+          <TextField
+            type={type}
+            variant="standard"
+            id={label}
+            label={label}
+            key={label}
+            error={!!error}
+            helperText={error}
+            {...register(`${CompanyType.SENDER}.${registerNames}`, {
+              required: 'This field is required',
+            })}
+          />
+        );
+      })}
     </Stack>
   );
 };

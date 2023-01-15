@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import uuid from 'react-uuid';
 import { Box, Container } from '@mui/system';
 import { Grid, LinearProgress } from '@mui/material';
-import useGetInvoice from '../../../services/UseGetInvoice';
 import { Recipient } from './InvoiceRecipientFields/InvoiceRecipientFields';
 import { Sender } from './InvoiceSenderFields/InvoiceSenderFields';
 import { StyledContainer } from './InvoiceEditor.styles';
@@ -13,30 +12,39 @@ import { InvoiceButtons } from './InvoiceButtons/InvoiceButtons';
 import { AddItem } from './InvoiceAddItem/InvoiceAddItem';
 import { InvoiceProps } from '../../../models/Invoice-model';
 import { defaultFormValues } from '../../../utils/helpers/defaultFormValues';
+import {
+  useGetInvoiceData,
+  useSaveInvoice,
+  useUpdateInvoice,
+} from '../../../services/UseGetInvoice';
+import { useEffect } from 'react';
 
 type InvoiceEditorProps = {
   isEditMode?: boolean;
 };
 
-export interface IInvoiceContext {
-  addInvoice: (invoice: InvoiceProps) => void;
-  editInvoice: (invoice: InvoiceProps) => void;
-}
-
 export const InvoiceEditor = ({ isEditMode }: InvoiceEditorProps) => {
   const { state } = useLocation();
-  const { updateInvoice, saveNewInvoice, isLoading } = useGetInvoice();
+  const { data, isLoading } = useGetInvoiceData(isEditMode && state.id);
+  const { save } = useSaveInvoice();
+  const { update } = useUpdateInvoice();
   const navigate = useNavigate();
   const methods = useForm<InvoiceProps>({
-    defaultValues: state ? state.response : defaultFormValues,
+    defaultValues: data ? data : defaultFormValues,
   });
 
-  const onSubmit = (data: InvoiceProps) => {
+  useEffect(() => {
+    if (data && state) {
+      methods.reset(data);
+    }
+  }, [data]);
+
+  const onSubmit = (submitData: InvoiceProps) => {
     if (isEditMode) {
-      updateInvoice(data);
+      update(submitData);
       navigate('/invoices');
     } else {
-      saveNewInvoice({ ...data, id: uuid() });
+      save({ ...submitData, id: uuid() });
       navigate('/invoices');
     }
   };

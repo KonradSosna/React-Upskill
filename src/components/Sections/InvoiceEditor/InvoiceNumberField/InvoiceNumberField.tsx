@@ -1,15 +1,22 @@
 import { TextField } from '@mui/material';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Invoice } from '../../../../models/Invoice-model';
 
 export const InvoiceNumberField = () => {
   const {
     register,
+    setFocus,
     formState: { errors },
   } = useFormContext<Invoice>();
 
+  useEffect(() => {
+    setFocus('no', { shouldSelect: true });
+  }, []);
+
   return (
     <TextField
+      data-testid="noField"
       variant="standard"
       type="test"
       id="numberField"
