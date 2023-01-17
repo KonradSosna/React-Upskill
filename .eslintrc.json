@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "extends": ["eslint:recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["@typescript-eslint", "eslint-plugin-import", "react", "prettier"],
+  "ignorePatterns": ["**/*", ".eslintrc.js"]
+}

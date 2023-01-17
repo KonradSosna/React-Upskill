@@ -1,3 +1,157 @@
 {
-  "posts": [{ "id": 1, "title": "json-server", "author": "typicode" }]
+  "invoices": [
+    {
+      "id": "abc6f79b-2077-b486-fa1a-473e76f88f86",
+      "number": "",
+      "createdDate": "2022-11-30T23:00:00.000Z",
+      "validDate": "",
+      "recipient": {
+        "companyName": "",
+        "city": "",
+        "street": "",
+        "postalCode": "",
+        "nip": "siema",
+        "phone": "",
+        "mail": "",
+        "bankAccount": "",
+        "name": "siema",
+        "postcode": ""
+      },
+      "sender": {
+        "companyName": "",
+        "city": "",
+        "street": "siema",
+        "postalCode": "",
+        "nip": "",
+        "phone": "siema",
+        "mail": "",
+        "bankAccount": "",
+        "name": "",
+        "postcode": ""
+      },
+      "items": [],
+      "no": "test",
+      "validUntilDate": "2022-12-22T22:59:44.000Z",
+      "item": [
+        {
+          "name": "siema",
+          "amount": "1",
+          "unit": "2",
+          "tax": "3",
+          "price": "4"
+        },
+        {
+          "name": "",
+          "amount": "",
+          "unit": "",
+          "tax": "",
+          "price": ""
+        }
+      ]
+    },
+    {
+      "id": "04744c01-4d46-4fe0-ed9e-aec9b330ea9d",
+      "number": "",
+      "createdDate": "2022-12-01T23:00:00.000Z",
+      "validDate": "",
+      "recipient": {
+        "companyName": "",
+        "city": "wolna",
+        "street": "2",
+        "postalCode": "",
+        "nip": "2345346454",
+        "phone": "141241443",
+        "mail": "firma@gmail.com",
+        "bankAccount": "2222 3333 4444 5677",
+        "name": "Firma",
+        "postcode": "11-200"
+      },
+      "sender": {
+        "companyName": "",
+        "city": "polna",
+        "street": "12",
+        "postalCode": "",
+        "nip": "345435345",
+        "phone": "111222333",
+        "mail": "januszex@gmail.com",
+        "bankAccount": "1111 4444 5555 6666",
+        "name": "Januszex",
+        "postcode": "00-300"
+      },
+      "items": [],
+      "no": "A1/12",
+      "validUntilDate": "2022-12-08T23:50:49.000Z",
+      "item": [
+        {
+          "name": "usługi",
+          "amount": 5,
+          "unit": "5",
+          "tax": "23",
+          "price": "4"
+        }
+      ]
+    },
+    {
+      "id": "5b56653b-ede1-aa71-e5b5-09b24688807b",
+      "number": "",
+      "recipient": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "v@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "v"
+      },
+      "sender": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "companyName@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "companyName"
+      },
+      "items": [],
+      "no": "12",
+      "createdDate": "2023-01-05T20:40:43.000Z",
+      "validUntilDate": "2023-01-13T20:40:43.000Z",
+      "item": []
+    },
+    {
+      "id": "e74004ec-fad3-db83-919a-80da5841a76a",
+      "number": "",
+      "recipient": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "v@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "v"
+      },
+      "sender": {
+        "name": "companyName",
+        "city": "companyName",
+        "street": "companyName",
+        "postalCode": "",
+        "nip": "companyName",
+        "phone": "companyName",
+        "mail": "companyName@wp.pl",
+        "bankAccount": "companyName",
+        "postcode": "companyName"
+      },
+      "items": [],
+      "no": "1234",
+      "createdDate": "2023-01-05T20:40:43.000Z",
+      "validUntilDate": "2023-01-13T20:40:43.000Z",
+      "item": []
+    }
+  ]
 }
