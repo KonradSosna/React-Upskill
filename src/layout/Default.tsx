@@ -1,7 +1,4 @@
-import React from 'react';
-
-import { Box, Container, styled } from '@mui/material';
-import { ThemeProvider } from '@mui/material';
+import { Box, Container, styled, ThemeProvider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 

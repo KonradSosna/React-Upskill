@@ -10,6 +10,13 @@ import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import {
+  AddItemButton,
+  ButtonsBox,
+  ButtonsGrid,
+  DatesBox,
+  ItemsBox,
+} from './Create';
 import AppInput from '../components/atoms/AppInput';
 import AppForm from '../components/organisms/AppForm';
 import useInvoice from '../hooks/useInvoice';
@@ -18,13 +25,6 @@ import {
   INVOICE_USER_FIELDS,
   INVOIEC_NUMBER_FIELD,
 } from '../utils/defaultValues';
-import {
-  AddItemButton,
-  ButtonsBox,
-  ButtonsGrid,
-  DatesBox,
-  ItemsBox,
-} from './Create';
 
 function InvoiceSkeleton() {
   return (
@@ -145,7 +145,7 @@ export default function CreateInvoice() {
                     value={dates.created}
                     inputFormat="MM/dd/yyyy"
                     onChange={onCreatedDateChange}
-                    renderInput={(params) => (
+                    renderInput={(params: any) => (
                       <TextField
                         {...params}
                         name="createdDate"
@@ -159,7 +159,7 @@ export default function CreateInvoice() {
                     label={t('invoice.form.validUntilDate')}
                     value={dates.valid}
                     onChange={onValidDateChange}
-                    renderInput={(params) => (
+                    renderInput={(params: any) => (
                       <TextField
                         {...params}
                         required

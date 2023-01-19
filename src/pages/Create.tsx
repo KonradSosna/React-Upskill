@@ -123,7 +123,7 @@ export default function CreateInvoice() {
                   value={dates.created}
                   inputFormat="MM/dd/yyyy"
                   onChange={onCreatedDateChange}
-                  renderInput={(params) => (
+                  renderInput={(params: any) => (
                     <TextField
                       {...params}
                       name="createdDate"
@@ -137,7 +137,7 @@ export default function CreateInvoice() {
                   label={t('invoice.form.validUntilDate')}
                   value={dates.valid}
                   onChange={onValidDateChange}
-                  renderInput={(params) => (
+                  renderInput={(params: any) => (
                     <TextField
                       {...params}
                       required

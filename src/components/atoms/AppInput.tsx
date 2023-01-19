@@ -41,7 +41,7 @@ export default function AppInput({
       name={name}
       inputRef={field.ref}
       error={!!errors[fieldKey]}
-      helperText={errors[fieldKey] ? errors[fieldKey].message : ''}
+      helperText={errors[fieldKey] ? errors[fieldKey]?.message : ''}
     />
   );
 }

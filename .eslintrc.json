@@ -1,0 +1,42 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "extends": ["plugin:react/recommended", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "jest-dom",
+    "jsx-a11y",
+    "react",
+    "react-hooks"
+  ],
+  "rules": {
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "import/prefer-default-export": "off",
+    "import/no-cycle": "off",
+    "no-multi-assign": "off",
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/indent": "off",
+    "max-classes-per-file": "off",
+    "react/state-in-constructor": "off",
+    "react/jsx-no-duplicate-props": [1, { "ignoreCase": false }],
+    "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-restricted-imports": ["error"],
+    "import/no-duplicates": "error",
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

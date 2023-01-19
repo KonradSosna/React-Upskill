@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
-import { FormField } from '../intefaces/invoices';
 import { regexpValidation } from './validations';
+import { FormField } from '../intefaces/invoices';
 
 export const INVOICE_USER_FIELDS = [
   {

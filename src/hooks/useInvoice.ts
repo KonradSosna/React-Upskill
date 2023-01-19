@@ -1,10 +1,10 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { useYupValidationResolver } from './useYupValidation';
 import { FormDates, FormField } from '../intefaces/invoices';
 import ApiService from '../services/api';
 import {
@@ -19,7 +19,6 @@ import {
   createValidationSchema,
   INVOICE_ITEM_FIELDS,
 } from '../utils/defaultValues';
-import { useYupValidationResolver } from './useYupValidation';
 
 const { createdDate, validDate } = createInitialDates();
 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import { useState, MouseEvent } from 'react';
 import TranslateIcon from '@mui/icons-material/Translate';
 import {
   AppBar,
@@ -10,7 +9,6 @@ import {
   Toolbar,
   styled,
 } from '@mui/material';
-
 import i18n from '../../i18n';
 import AppLink from '../atoms/AppLink';
 
@@ -37,9 +35,9 @@ export default function AppNav(props: { navigation: Nav[] }) {
     i18n.changeLanguage(lang.code);
     handleClose();
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
