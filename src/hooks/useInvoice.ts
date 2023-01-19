@@ -41,7 +41,7 @@ export default function useInvoice() {
   }
 
   function removeItem(index: number) {
-    setItems((items) =>
+    setItems((_items) =>
       items.filter((_item, itemIndex) => itemIndex !== index)
     );
   }

@@ -78,7 +78,7 @@ function InvoiceSkeleton() {
 
 export default function CreateInvoice() {
   const loading = useProgressInterceptor();
-  const params = useParams();
+  const paramsRouter = useParams();
 
   const { t } = useTranslation();
   const {
@@ -96,8 +96,8 @@ export default function CreateInvoice() {
   } = useInvoice();
 
   useEffect(() => {
-    if (params.id) {
-      fetchInvoice(params.id);
+    if (paramsRouter.id) {
+      fetchInvoice(paramsRouter.id);
     }
   }, []);
 

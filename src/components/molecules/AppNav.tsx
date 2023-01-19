@@ -30,13 +30,16 @@ export default function AppNav(props: { navigation: Nav[] }) {
   ];
   const [en, pl] = languages;
   const [lang, setLanguage] = useState(en);
-  const onChange = (lang: any) => {
-    setLanguage(lang);
-    i18n.changeLanguage(lang.code);
+
+  const onChange = (lng: any) => {
+    setLanguage(lng);
+    i18n.changeLanguage(lng.code);
     handleClose();
   };
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

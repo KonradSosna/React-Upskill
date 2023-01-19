@@ -51,7 +51,7 @@ export default function Home() {
 
   const deleteInvoiceHandler = useCallback((id: string | number) => {
     deleteInvoice(id, () => {
-      setInvoices((invoices) =>
+      setInvoices((_invoices) =>
         invoices.filter((invoice: any) => invoice.id !== id)
       );
     });
