@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Typography } from '@mui/material';
 import { Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

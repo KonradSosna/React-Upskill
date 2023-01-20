@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import { Delete, Edit } from '@mui/icons-material';
 import {
@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)((props) => ({
 }));
 
 // eslint-disable-next-line react/display-name
-const AppTable = React.memo(
+const AppTable = memo(
   ({
     list,
     headers,
