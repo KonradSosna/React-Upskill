@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Box, Grid, Typography, styled } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useTranslation } from 'react-i18next';
