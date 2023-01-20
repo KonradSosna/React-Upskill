@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';

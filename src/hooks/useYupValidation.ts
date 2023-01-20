@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 export const useYupValidationResolver = (validationSchema: any) =>
   useCallback(
