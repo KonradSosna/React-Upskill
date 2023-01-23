@@ -1,6 +1,7 @@
-import { Box, Grid, Typography, styled } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 const Error = styled('span')({
   color: grey[500],

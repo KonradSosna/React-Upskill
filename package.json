@@ -97,9 +97,11 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.5",
+    "@types/styled-components": "^5.1.26",
     "eslint": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.7",
     "prettier": "^2.5.1"

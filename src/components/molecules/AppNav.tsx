@@ -1,16 +1,9 @@
 import { useState, MouseEvent } from 'react';
 import TranslateIcon from '@mui/icons-material/Translate';
-import {
-  AppBar,
-  Box,
-  Button,
-  Menu,
-  MenuItem,
-  Toolbar,
-  styled,
-} from '@mui/material';
+import { AppBar, Box, Button, Menu, MenuItem, Toolbar } from '@mui/material';
 import i18n from '../../i18n';
 import AppLink from '../atoms/AppLink';
+import styled from 'styled-components';
 
 interface Nav {
   to: string;

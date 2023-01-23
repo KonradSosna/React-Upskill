@@ -3,7 +3,6 @@ import { memo } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import {
   Paper,
-  styled,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +14,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Invoice, Headers } from '../../intefaces/invoices';
+import styled from 'styled-components';
 
 const StyleTable = styled(Table)({
   minWidth: '650px',

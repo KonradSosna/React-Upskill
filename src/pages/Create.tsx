@@ -10,7 +10,6 @@ import {
   Container,
   Grid,
   IconButton,
-  styled,
   TextField,
   Typography,
 } from '@mui/material';
@@ -23,6 +22,7 @@ import {
   INVOICE_USER_FIELDS,
   INVOIEC_NUMBER_FIELD,
 } from '../utils/defaultValues';
+import styled from 'styled-components';
 
 export const ItemsBox = styled(Box)({
   display: 'flex',

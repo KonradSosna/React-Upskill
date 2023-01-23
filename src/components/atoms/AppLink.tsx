@@ -1,5 +1,5 @@
-import { styled } from '@mui/material';
 import { NavLink, NavLinkProps } from 'react-router-dom';
+import styled from 'styled-components';
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;

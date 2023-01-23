@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AppSuspense from './components/atoms/AppSuspense';
 import DefaultLayout from './layout/Default';
-import './App.css';
 
 const Invoices = lazy(() => import('./pages/Invoices'));
 const Create = lazy(() => import('./pages/Create'));
@@ -15,11 +14,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DefaultLayout></DefaultLayout>}>
+        <Route path="/" element={<DefaultLayout />}>
           <Route
             path="*"
             element={
-              <Suspense fallback={<AppSuspense></AppSuspense>}>
+              <Suspense fallback={<AppSuspense />}>
                 <NotFound />
               </Suspense>
             }
@@ -27,7 +26,7 @@ function App() {
           <Route
             index
             element={
-              <Suspense fallback={<AppSuspense></AppSuspense>}>
+              <Suspense fallback={<AppSuspense />}>
                 <Invoices />
               </Suspense>
             }
@@ -35,7 +34,7 @@ function App() {
           <Route
             path="create"
             element={
-              <Suspense fallback={<AppSuspense></AppSuspense>}>
+              <Suspense fallback={<AppSuspense />}>
                 <Create />
               </Suspense>
             }
@@ -43,7 +42,7 @@ function App() {
           <Route
             path="invoices/:id"
             element={
-              <Suspense fallback={<AppSuspense></AppSuspense>}>
+              <Suspense fallback={<AppSuspense />}>
                 <Invoice />
               </Suspense>
             }
