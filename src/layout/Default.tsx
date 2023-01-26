@@ -1,4 +1,5 @@
 import { Box, Container } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
@@ -6,7 +7,7 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import AppProgressBar from '../components/atoms/AppProgressBar';
 import AppNav from '../components/molecules/AppNav';
 import useProgressInterceptor from '../hooks/useProgressInterceptor';
-import theme from '../theme';
+import { darkTheme, theme } from '../theme';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -23,6 +24,7 @@ const BoxStyled = styled(Box)({
 
 export default function Layout() {
   const { t } = useTranslation();
+  const [themed, setTheme] = useState('light');
   const loading = useProgressInterceptor();
   const navigation = [
     {
@@ -35,11 +37,15 @@ export default function Layout() {
     },
   ];
 
+  // const themeToggler = () => {
+  //   theme === 'light' ? setTheme('dark') : setTheme('light');
+  // };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <AppProgressBar loading={loading} />
-      <AppNav navigation={navigation} />
+      <AppNav navigation={navigation} theme={theme} />
       <main>
         <Container>
           <BoxStyled>
