@@ -1,13 +1,19 @@
-import { Box, Container } from '@mui/material';
-import { useState } from 'react';
+import {
+  Box,
+  Container,
+  createTheme,
+  Paper,
+  ThemeProvider,
+} from '@mui/material';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+import { red } from '@mui/material/colors';
 
 import AppProgressBar from '../components/atoms/AppProgressBar';
 import AppNav from '../components/molecules/AppNav';
 import useProgressInterceptor from '../hooks/useProgressInterceptor';
-import { darkTheme, theme } from '../theme';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -37,22 +43,47 @@ export default function Layout() {
     },
   ];
 
-  // const themeToggler = () => {
-  //   theme === 'light' ? setTheme('dark') : setTheme('light');
-  // };
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: themed as 'light' | 'dark',
+          primary: {
+            main: '#556cd6',
+          },
+          secondary: {
+            main: '#19857b',
+          },
+          error: {
+            main: red.A400,
+          },
+          info: {
+            main: '#ccc',
+          },
+        },
+      }),
+    [themed]
+  );
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <AppProgressBar loading={loading} />
-      <AppNav navigation={navigation} theme={theme} />
-      <main>
-        <Container>
-          <BoxStyled>
-            <Outlet />
-          </BoxStyled>
-        </Container>
-      </main>
+      <Paper style={{ height: '100vh' }}>
+        <GlobalStyle />
+        <AppProgressBar loading={loading} />
+        <AppNav
+          navigation={navigation}
+          theme={theme}
+          themed={themed}
+          setTheme={setTheme}
+        />
+        <main>
+          <Container>
+            <BoxStyled>
+              <Outlet />
+            </BoxStyled>
+          </Container>
+        </main>
+      </Paper>
     </ThemeProvider>
   );
 }

@@ -1,16 +1,29 @@
 import { StrictMode } from 'react';
 
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './i18n';
+import { StyledEngineProvider } from '@mui/material';
 
-ReactDOM.render(
+// ReactDOM.render(
+//   <StrictMode>
+//     <StyledEngineProvider injectFirst>
+//       <App />
+//     </StyledEngineProvider>
+//   </StrictMode>,
+//   document.getElementById('root')
+// );
+
+const root = createRoot(document.getElementById('root')!);
+root.render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-  document.getElementById('root')
+    <StyledEngineProvider injectFirst>
+      <App />
+    </StyledEngineProvider>
+  </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 
-export const useYupValidationResolver = (validationSchema: any) =>
+export const useYupValidationResolver = (
+  validationSchema: ReturnType<typeof Object>
+) =>
   useCallback(
-    async (data) => {
+    async (data: any) => {
       try {
         const values = await validationSchema.validate(data, {
           abortEarly: false,
