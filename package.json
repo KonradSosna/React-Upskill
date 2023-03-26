@@ -46,7 +46,7 @@
     "eject": "react-scripts eject",
     "prepare": "husky install",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "prettier:fix": "prettier -write .",
+    "prettier:fix": "prettier --write .",
     "prettier:check": "prettier --check .",
     "db": "json-server --delay 1500 ./server/db.json"
   },

@@ -1,21 +1,12 @@
-import { StrictMode } from 'react';
+import './i18n';
 
-// import ReactDOM from 'react-dom';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { StyledEngineProvider } from '@mui/material';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './i18n';
-import { StyledEngineProvider } from '@mui/material';
-
-// ReactDOM.render(
-//   <StrictMode>
-//     <StyledEngineProvider injectFirst>
-//       <App />
-//     </StyledEngineProvider>
-//   </StrictMode>,
-//   document.getElementById('root')
-// );
 
 const root = createRoot(document.getElementById('root')!);
 root.render(

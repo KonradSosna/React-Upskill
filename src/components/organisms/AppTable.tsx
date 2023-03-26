@@ -28,11 +28,9 @@ const StyledEditteIcon = styled(Edit)({
 });
 
 const StyledTableCell = styled(TableCell)((props) => ({
-  // eslint-disable-next-line react/prop-types
   textAlign: props.align,
 }));
 
-// eslint-disable-next-line react/display-name
 const AppTable = memo(
   ({
     list,

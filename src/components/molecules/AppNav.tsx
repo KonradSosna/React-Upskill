@@ -14,6 +14,9 @@ import AppLink from '../atoms/AppLink';
 import styled from 'styled-components';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTheme } from '../../store/store';
+import { ReducerType } from '../../store/types';
 
 interface Nav {
   to: string;
@@ -23,10 +26,22 @@ interface Nav {
 interface AppNav {
   navigation: Nav[];
   themed: string;
-  setTheme: (theme: string) => void;
 }
 
-export const AppNav: FC<AppNav> = ({ navigation, themed, setTheme }) => {
+const StyledBox = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  margin: '0 20px',
+});
+
+const StyledButton = styled(Button)({
+  color: 'white',
+});
+
+export const AppNav: FC<AppNav> = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const themed = useSelector((state: ReducerType) => state.invoiceList.theme);
+
   const languages = [
     {
       code: 'en',
@@ -56,18 +71,10 @@ export const AppNav: FC<AppNav> = ({ navigation, themed, setTheme }) => {
     setAnchorEl(null);
   };
 
-  const StyledBox = styled(Box)({
-    display: 'flex',
-    alignItems: 'center',
-    margin: '0 20px',
-  });
-
-  const StyledButton = styled(Button)({
-    color: 'white',
-  });
-
   const themeToggler = () => {
-    themed === 'light' ? setTheme('dark') : setTheme('light');
+    themed === 'light'
+      ? dispatch(setTheme('dark'))
+      : dispatch(setTheme('light'));
   };
 
   return (

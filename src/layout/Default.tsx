@@ -1,3 +1,9 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
+
 import {
   Box,
   Container,
@@ -5,24 +11,12 @@ import {
   Paper,
   ThemeProvider,
 } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
-import { red } from '@mui/material/colors';
 
 import AppProgressBar from '../components/atoms/AppProgressBar';
 import AppNav from '../components/molecules/AppNav';
 import useProgressInterceptor from '../hooks/useProgressInterceptor';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-  }
-`;
+import { GlobalStyle } from '../utils/theme';
+import { ReducerType } from '../store/types';
 
 const BoxStyled = styled(Box)({
   margin: '2rem 0',
@@ -30,7 +24,6 @@ const BoxStyled = styled(Box)({
 
 export default function Layout() {
   const { t } = useTranslation();
-  const [themed, setTheme] = useState('light');
   const loading = useProgressInterceptor();
   const navigation = [
     {
@@ -43,6 +36,8 @@ export default function Layout() {
     },
   ];
 
+  const themed = useSelector((state: ReducerType) => state.invoiceList.theme);
+
   const theme = useMemo(
     () =>
       createTheme({
@@ -52,10 +47,10 @@ export default function Layout() {
             main: '#556cd6',
           },
           secondary: {
-            main: '#19857b',
+            main: '#851919',
           },
           error: {
-            main: red.A400,
+            main: '#b92424',
           },
           info: {
             main: '#ccc',
@@ -70,12 +65,7 @@ export default function Layout() {
       <Paper style={{ height: '100vh' }}>
         <GlobalStyle />
         <AppProgressBar loading={loading} />
-        <AppNav
-          navigation={navigation}
-          theme={theme}
-          themed={themed}
-          setTheme={setTheme}
-        />
+        <AppNav navigation={navigation} />
         <main>
           <Container>
             <BoxStyled>
