@@ -1,19 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { CSSProperties, FC, useEffect, useRef, useState } from 'react';
 import { Delete } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {
   Box,
   Button,
   Container,
   Grid,
   IconButton,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import AppInput from '../components/atoms/AppInput';
 import AppForm from '../components/organisms/AppForm';
@@ -56,8 +58,103 @@ export const DatesBox = styled(Box)({
   justifyContent: 'space-between',
 });
 
+function a11yProps(index: number) {
+  return {
+    id: `claim-report-tab-${index}`,
+    'aria-controls': `claim-report-tab-${index}`,
+  };
+}
+
+const StyledTab = styled(Tab)({
+  color: 'white',
+  fontSize: '16px',
+  backgroundColor: '#556cd6',
+  borderRadius: '15px',
+  // margin: `${!isMobile ? '0 30px' : '0 10px'} `,
+  // padding: `${!isMobile ? '0 45px' : '0 10px'} `,
+  margin: '0 30px',
+  padding: '0 45px',
+  textTransform: 'capitalize',
+
+  '&:hover': {
+    backgroundColor: '#3B4B95',
+  },
+
+  '&.Mui-selected': {
+    backgroundColor: '#242e5c',
+    color: 'white',
+  },
+});
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`claim-report-tabpanel-${index}`}
+      aria-labelledby={`claim-report-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <div>{children}</div>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+type TButtonProps = {
+  text: string;
+  variant?: 'contained' | 'outlined' | 'text';
+  sx?: CSSProperties | any;
+  onClick?: (v: any) => void;
+  disable?: boolean;
+  loading?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+};
+
+const FormButton: FC<TButtonProps> = ({
+  text,
+  variant,
+  sx,
+  onClick,
+  disable,
+  loading,
+  type,
+}) => {
+  return (
+    <LoadingButton
+      loading={loading}
+      onClick={onClick}
+      type={type}
+      disabled={disable}
+      variant={variant ? variant : 'contained'}
+      sx={{
+        width: '200px',
+        height: '50px',
+        textTransform: 'capitalize',
+        marginTop: '40px',
+        fontSize: '15px',
+        ...sx,
+      }}
+    >
+      {text}
+    </LoadingButton>
+  );
+};
+
 export default function CreateInvoice() {
   const [formHeight, setFormHeight] = useState(0);
+  const [value, setValue] = useState(0);
   const { t } = useTranslation();
   const {
     dates,
@@ -70,6 +167,8 @@ export default function CreateInvoice() {
     navigate,
     items,
     removeItem,
+    trigger,
+    errors,
   } = useInvoice();
 
   const formRef = useRef<any>(null);
@@ -79,6 +178,12 @@ export default function CreateInvoice() {
       setFormHeight(formRef.current.offsetHeight);
     }
   }, [items]);
+
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    if (newValue > value)
+      trigger().then((isValid: boolean) => isValid && setValue(newValue));
+    else setValue(newValue);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
@@ -149,20 +254,58 @@ export default function CreateInvoice() {
             </LocalizationProvider>
           </Grid>
         </Grid>
-        <Grid container spacing={4} sx={{ marginTop: 4 }}>
+        <Grid container direction="column" spacing={4} sx={{ marginTop: 4 }}>
+          <Grid item marginBottom="20px">
+            <Box>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+                variant="scrollable"
+                sx={{
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <StyledTab label="Step 1 - Recipient" {...a11yProps(0)} />
+                <StyledTab label="Step 2 - Sender" {...a11yProps(1)} />
+                <StyledTab label="Step 3 - Expense Report" {...a11yProps(2)} />
+              </Tabs>
+            </Box>
+          </Grid>
+
           <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <AppForm
-              control={control}
-              title={t('invoice.recipient')}
-              fields={INVOICE_USER_FIELDS}
-            ></AppForm>
+            <TabPanel value={value} index={0}>
+              <AppForm
+                control={control}
+                title={t('invoice.recipient')}
+                fields={INVOICE_USER_FIELDS}
+              />
+              <FormButton
+                text="Continue"
+                type="submit"
+                onClick={() =>
+                  trigger().then((isValid: boolean) => isValid && setValue(2))
+                }
+              />
+            </TabPanel>
           </Grid>
           <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <AppForm
-              control={control}
-              title={t('invoice.sender')}
-              fields={INVOICE_USER_FIELDS}
-            ></AppForm>
+            <TabPanel value={value} index={1}>
+              <AppForm
+                control={control}
+                title={t('invoice.sender')}
+                fields={INVOICE_USER_FIELDS}
+              />
+              <FormButton
+                text="Continue"
+                type="submit"
+                onClick={() =>
+                  trigger().then((isValid: boolean) => isValid && setValue(2))
+                }
+              />
+            </TabPanel>
           </Grid>
         </Grid>
 
@@ -218,7 +361,7 @@ export default function CreateInvoice() {
                   fieldKey={`${index}-${price.key}`}
                 ></AppInput>
                 <IconButton onClick={() => removeItem(index)}>
-                  <Delete></Delete>
+                  <Delete />
                 </IconButton>
               </ItemsBox>
             </Grid>

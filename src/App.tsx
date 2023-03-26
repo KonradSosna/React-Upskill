@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -29,7 +30,9 @@ function App() {
               index
               element={
                 <Suspense fallback={<AppSuspense />}>
-                  <Invoices />
+                  <ErrorBoundary FallbackComponent={NotFound}>
+                    <Invoices />
+                  </ErrorBoundary>
                 </Suspense>
               }
             ></Route>
@@ -37,7 +40,9 @@ function App() {
               path="create"
               element={
                 <Suspense fallback={<AppSuspense />}>
-                  <Create />
+                  <ErrorBoundary FallbackComponent={NotFound}>
+                    <Create />
+                  </ErrorBoundary>
                 </Suspense>
               }
             ></Route>
@@ -45,7 +50,9 @@ function App() {
               path="invoices/:id"
               element={
                 <Suspense fallback={<AppSuspense />}>
-                  <Invoice />
+                  <ErrorBoundary FallbackComponent={NotFound}>
+                    <Invoice />
+                  </ErrorBoundary>
                 </Suspense>
               }
             ></Route>

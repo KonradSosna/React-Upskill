@@ -103,7 +103,7 @@ export default function CreateInvoice() {
   return (
     <form onSubmit={handleSubmit(onUpdate)}>
       {loading ? (
-        <InvoiceSkeleton></InvoiceSkeleton>
+        <InvoiceSkeleton />
       ) : (
         <Container>
           <Grid container spacing={4}>

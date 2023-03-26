@@ -32,7 +32,13 @@ export default function useInvoice() {
 
   const validationSchema = createValidationSchema();
   const resolver = useYupValidationResolver(yup.object(validationSchema));
-  const { handleSubmit, control, reset } = useForm({ resolver });
+  const {
+    handleSubmit,
+    control,
+    reset,
+    trigger,
+    formState: { errors },
+  } = useForm({ resolver });
 
   const [items, setItems] = useState<FormField[][]>([]);
 
@@ -168,5 +174,7 @@ export default function useInvoice() {
     control,
     dates,
     items,
+    trigger,
+    errors,
   };
 }
