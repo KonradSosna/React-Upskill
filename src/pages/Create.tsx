@@ -1,5 +1,4 @@
 import { CSSProperties, FC, useEffect, useRef, useState } from 'react';
-import { Delete } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -25,6 +24,7 @@ import {
   INVOIEC_NUMBER_FIELD,
 } from '../utils/defaultValues';
 import styled from 'styled-components';
+import { Delete } from '@mui/icons-material';
 
 export const ItemsBox = styled(Box)({
   display: 'flex',
@@ -160,15 +160,14 @@ export default function CreateInvoice() {
     dates,
     onCreatedDateChange,
     onValidDateChange,
-    addItem,
     handleSubmit,
     onSubmit,
     control,
     navigate,
-    items,
     removeItem,
+    addItem,
+    items,
     trigger,
-    errors,
   } = useInvoice();
 
   const formRef = useRef<any>(null);
@@ -185,6 +184,10 @@ export default function CreateInvoice() {
     else setValue(newValue);
   };
 
+  const recipientFields = INVOICE_USER_FIELDS.map(
+    (field) => `recipient-${field.key}`
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
       <Container>
@@ -198,7 +201,7 @@ export default function CreateInvoice() {
               fieldKey={INVOIEC_NUMBER_FIELD.key}
               rules={INVOIEC_NUMBER_FIELD.rules}
               type={INVOIEC_NUMBER_FIELD.type}
-            ></AppInput>
+            />
           </Grid>
           <ButtonsGrid item xs={6}>
             <ButtonsBox>
@@ -260,7 +263,7 @@ export default function CreateInvoice() {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                aria-label="basic tabs example"
+                aria-label="invoice tabs"
                 variant="scrollable"
                 sx={{
                   width: '100%',
@@ -270,7 +273,7 @@ export default function CreateInvoice() {
               >
                 <StyledTab label="Step 1 - Recipient" {...a11yProps(0)} />
                 <StyledTab label="Step 2 - Sender" {...a11yProps(1)} />
-                <StyledTab label="Step 3 - Expense Report" {...a11yProps(2)} />
+                <StyledTab label="Step 3 - Add items" {...a11yProps(2)} />
               </Tabs>
             </Box>
           </Grid>
@@ -286,7 +289,9 @@ export default function CreateInvoice() {
                 text="Continue"
                 type="submit"
                 onClick={() =>
-                  trigger().then((isValid: boolean) => isValid && setValue(2))
+                  trigger([...recipientFields]).then(
+                    (isValid: boolean) => isValid && setValue(1)
+                  )
                 }
               />
             </TabPanel>
@@ -299,79 +304,104 @@ export default function CreateInvoice() {
                 fields={INVOICE_USER_FIELDS}
               />
               <FormButton
+                text="Previous"
+                type="button"
+                onClick={() => setValue(0)}
+              />
+              <FormButton
                 text="Continue"
                 type="submit"
+                sx={{ marginLeft: '15px' }}
                 onClick={() =>
                   trigger().then((isValid: boolean) => isValid && setValue(2))
                 }
               />
             </TabPanel>
           </Grid>
-        </Grid>
 
-        {items.map(([name, amount, unit, tax, price], index) => (
-          <Grid container spacing={4} key={index}>
-            <Grid item xs={6}>
-              <AppInput
-                key={name.key}
-                control={control}
-                label={t(name.label)}
-                rules={name.rules}
-                type={name.type}
-                name={`${index}-${name.key}`}
-                fieldKey={`${index}-${name.key}`}
-              ></AppInput>
-            </Grid>
-            <Grid item xs={6}>
-              <ItemsBox>
-                <AppInput
-                  key={amount.key}
-                  control={control}
-                  label={t(amount.label)}
-                  rules={amount.rules}
-                  type={amount.type}
-                  name={`${index}-${amount.key}`}
-                  fieldKey={`${index}-${amount.key}`}
-                ></AppInput>
-                <AppInput
-                  key={unit.key}
-                  control={control}
-                  label={t(unit.label)}
-                  rules={unit.rules}
-                  type={unit.type}
-                  name={`${index}-${unit.key}`}
-                  fieldKey={`${index}-${unit.key}`}
-                ></AppInput>
-                <AppInput
-                  key={tax.key}
-                  control={control}
-                  label={t(tax.label)}
-                  rules={tax.rules}
-                  type={tax.type}
-                  name={`${index}-${tax.key}`}
-                  fieldKey={`${index}-${tax.key}`}
-                ></AppInput>
-                <AppInput
-                  key={price.key}
-                  control={control}
-                  label={t(price.label)}
-                  rules={price.rules}
-                  type={price.type}
-                  name={`${index}-${price.key}`}
-                  fieldKey={`${index}-${price.key}`}
-                ></AppInput>
-                <IconButton onClick={() => removeItem(index)}>
-                  <Delete />
-                </IconButton>
-              </ItemsBox>
-            </Grid>
+          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <TabPanel value={value} index={2}>
+              {items.length > 0 ? (
+                items.map(([name, amount, unit, tax, price], index) => (
+                  <Grid container spacing={4} key={index}>
+                    <Grid item xs={6}>
+                      <AppInput
+                        key={name.key}
+                        control={control}
+                        label={t(name.label)}
+                        rules={name.rules}
+                        type={name.type}
+                        name={`${index}-${name.key}`}
+                        fieldKey={`${index}-${name.key}`}
+                      ></AppInput>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <ItemsBox>
+                        <AppInput
+                          key={amount.key}
+                          control={control}
+                          label={t(amount.label)}
+                          rules={amount.rules}
+                          type={amount.type}
+                          name={`${index}-${amount.key}`}
+                          fieldKey={`${index}-${amount.key}`}
+                        ></AppInput>
+                        <AppInput
+                          key={unit.key}
+                          control={control}
+                          label={t(unit.label)}
+                          rules={unit.rules}
+                          type={unit.type}
+                          name={`${index}-${unit.key}`}
+                          fieldKey={`${index}-${unit.key}`}
+                        ></AppInput>
+                        <AppInput
+                          key={tax.key}
+                          control={control}
+                          label={t(tax.label)}
+                          rules={tax.rules}
+                          type={tax.type}
+                          name={`${index}-${tax.key}`}
+                          fieldKey={`${index}-${tax.key}`}
+                        ></AppInput>
+                        <AppInput
+                          key={price.key}
+                          control={control}
+                          label={t(price.label)}
+                          rules={price.rules}
+                          type={price.type}
+                          name={`${index}-${price.key}`}
+                          fieldKey={`${index}-${price.key}`}
+                        ></AppInput>
+                        <IconButton onClick={() => removeItem(index)}>
+                          <Delete />
+                        </IconButton>
+                      </ItemsBox>
+                    </Grid>
+                  </Grid>
+                ))
+              ) : (
+                <Typography textAlign="center">{'No items added'}</Typography>
+              )}
+
+              <AddItemButton>
+                <Button variant="contained" onClick={addItem}>
+                  {t('commons.addItem')}
+                </Button>
+              </AddItemButton>
+              <FormButton
+                text="Previous"
+                type="button"
+                onClick={() => setValue(1)}
+              />
+              <FormButton
+                text="Submit"
+                type="submit"
+                sx={{ marginLeft: '15px' }}
+              />
+            </TabPanel>
           </Grid>
-        ))}
-        <AddItemButton>
-          <Button variant="contained" onClick={addItem}>
-            {t('commons.addItem')}
-          </Button>
-        </AddItemButton>
+        </Grid>
       </Container>
     </form>
   );

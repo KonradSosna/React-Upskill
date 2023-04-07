@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { Delete } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Button, Container, Grid, IconButton, TextField } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import {
   AddItemButton,
@@ -19,11 +19,11 @@ import {
 import AppInput from '../components/atoms/AppInput';
 import AppForm from '../components/organisms/AppForm';
 import useInvoice from '../hooks/useInvoice';
-import useProgressInterceptor from '../hooks/useProgressInterceptor';
 import {
   INVOICE_USER_FIELDS,
   INVOIEC_NUMBER_FIELD,
 } from '../utils/defaultValues';
+import { invoicesApi } from '../store/store';
 
 function InvoiceSkeleton() {
   return (
@@ -39,12 +39,10 @@ function InvoiceSkeleton() {
           </ButtonsBox>
         </ButtonsGrid>
         <Grid item xs={6} sx={{ marginTop: 2 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatesBox>
-              <Skeleton animation="wave" height={70} width={200} />
-              <Skeleton animation="wave" height={70} width={200} />
-            </DatesBox>
-          </LocalizationProvider>
+          <DatesBox>
+            <Skeleton animation="wave" height={70} width={200} />
+            <Skeleton animation="wave" height={70} width={200} />
+          </DatesBox>
         </Grid>
       </Grid>
       <Grid container spacing={4} sx={{ marginTop: 4 }}>
@@ -76,7 +74,6 @@ function InvoiceSkeleton() {
 }
 
 export default function CreateInvoice() {
-  const loading = useProgressInterceptor();
   const paramsRouter = useParams();
 
   const { t } = useTranslation();
@@ -94,15 +91,20 @@ export default function CreateInvoice() {
     fetchInvoice,
   } = useInvoice();
 
-  useEffect(() => {
-    if (paramsRouter.id) {
-      fetchInvoice(paramsRouter.id);
+  const { data, isFetching, error } = invoicesApi.useGetInvoiceQuery(
+    paramsRouter.id!,
+    {
+      skip: !paramsRouter.id,
     }
-  }, []);
+  );
+
+  useEffect(() => {
+    if (data && !isFetching) fetchInvoice(data, error);
+  }, [data, isFetching]);
 
   return (
     <form onSubmit={handleSubmit(onUpdate)}>
-      {loading ? (
+      {isFetching ? (
         <InvoiceSkeleton />
       ) : (
         <Container>
@@ -115,7 +117,7 @@ export default function CreateInvoice() {
                 fieldKey={INVOIEC_NUMBER_FIELD.key}
                 rules={INVOIEC_NUMBER_FIELD.rules}
                 type={INVOIEC_NUMBER_FIELD.type}
-              ></AppInput>
+              />
             </Grid>
             <ButtonsGrid item xs={6}>
               <ButtonsBox>

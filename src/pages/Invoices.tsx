@@ -1,12 +1,10 @@
-import { useCallback } from 'react';
-
 import { Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 import AppTable from '../components/organisms/AppTable';
 import useInvoice from '../hooks/useInvoice';
-import useInvoices from '../hooks/useInvoices';
 import { Headers } from '../intefaces/invoices';
+import { invoicesApi } from '../store/store';
 import { createArrayFromNumber } from '../utils';
 
 const headers: Headers[] = [
@@ -46,27 +44,19 @@ const TableSkeleton = ({
 };
 
 export default function Home() {
-  const { invoices, setInvoices } = useInvoices();
-  const { deleteInvoice } = useInvoice();
-
-  const deleteInvoiceHandler = useCallback((id: string | number) => {
-    deleteInvoice(id, () => {
-      setInvoices((_invoices) =>
-        invoices.filter((invoice: any) => invoice.id !== id)
-      );
-    });
-  }, []);
+  const { handleDeleteInvoice } = useInvoice();
+  const { data: invoices, isFetching } = invoicesApi.useGetInvoicesQuery();
 
   return (
     <>
-      {invoices.length ? (
+      {isFetching ? (
+        <TableSkeleton columns={headers.length} rows={4} />
+      ) : (
         <AppTable
           list={invoices}
           headers={headers}
-          deleteInvoice={deleteInvoiceHandler}
-        ></AppTable>
-      ) : (
-        <TableSkeleton columns={headers.length} rows={4} />
+          deleteInvoice={handleDeleteInvoice}
+        />
       )}
     </>
   );

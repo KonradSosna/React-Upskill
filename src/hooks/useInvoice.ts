@@ -1,12 +1,13 @@
 import { useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { useYupValidationResolver } from './useYupValidation';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
+
 import { FormDates, FormField } from '../intefaces/invoices';
-import ApiService from '../services/api';
+import { invoicesApi } from '../store/store';
 import {
   formatDate,
   isValidDate,
@@ -19,11 +20,19 @@ import {
   createValidationSchema,
   INVOICE_ITEM_FIELDS,
 } from '../utils/defaultValues';
+import { useYupValidationResolver } from './useYupValidation';
+import { useSnackbar } from 'notistack';
 
 const { createdDate, validDate } = createInitialDates();
 
 export default function useInvoice() {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { refetch } = invoicesApi.useGetInvoicesQuery();
+  const [updateInvoice] = invoicesApi.useUpdateInvoiceMutation();
+  const [addInvoice] = invoicesApi.useAddInvoiceMutation();
+  const [deleteInvoice] = invoicesApi.useDeleteInvoiceMutation();
 
   const [dates, setDates] = useState<FormDates>({
     created: createdDate.toISOString(),
@@ -47,7 +56,8 @@ export default function useInvoice() {
   }
 
   function removeItem(index: number) {
-    setItems((_items) =>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setItems((_tems) =>
       items.filter((_item, itemIndex) => itemIndex !== index)
     );
   }
@@ -84,8 +94,10 @@ export default function useInvoice() {
     };
 
     try {
-      await ApiService.post('invoices', invoice);
+      await addInvoice(invoice);
+      enqueueSnackbar('Invoice created', { variant: 'success' });
       navigate('/');
+      await refetch();
     } catch (error) {
       console.error(error);
       throw error;
@@ -108,51 +120,72 @@ export default function useInvoice() {
     };
 
     try {
-      await ApiService.patch(`invoices/${data.id}`, invoice);
+      await updateInvoice(invoice);
+      enqueueSnackbar('Invoice updated', { variant: 'success' });
       navigate('/');
+      await refetch();
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('There was an error updating invoice', {
+        variant: 'error',
+      });
+
       throw error;
     }
   }
 
-  async function fetchInvoice(id: string) {
-    try {
-      const { data }: { data: any } = await ApiService.get(`invoices/${id}`);
-      const invoice: any = { ...data };
-      Object.keys(data.recipient).forEach((key: string) => {
+  async function fetchInvoice(
+    data: any,
+    error?: FetchBaseQueryError | SerializedError
+  ) {
+    if (error) {
+      console.error(error);
+      enqueueSnackbar('There was an error fetching invoice', {
+        variant: 'error',
+      });
+      navigate('/404');
+      return;
+    }
+
+    const invoice = { ...data };
+
+    if (data) {
+      Object.keys(data.recipient).forEach((key) => {
         invoice[`recipient-${key}`] = data.recipient[key];
       });
       Object.keys(data.sender).forEach((key: string) => {
         invoice[`sender-${key}`] = data.recipient[key];
       });
-      const itemsList: any = [];
-      data.items.forEach((item: any, index: number) => {
-        itemsList.push(INVOICE_ITEM_FIELDS);
-        Object.keys(item).forEach((key: string) => {
-          invoice[`${index}-${key}`] = item[key];
-        });
-      });
-      setItems([...itemsList]);
+    }
 
+    const itemsList: any = [];
+    data?.items.forEach((item: any, index: number) => {
+      itemsList.push(INVOICE_ITEM_FIELDS);
+      Object.keys(item).forEach((key: string) => {
+        invoice[`${index}-${key}`] = item[key];
+      });
+    });
+
+    setItems([...itemsList]);
+
+    if (data) {
       setDates({
         created: parseDate(data.createdDate),
         valid: parseDate(data.validDate),
       });
-
-      const { sender, recipient, ...rest } = invoice;
-
-      reset(rest);
-    } catch (error) {
-      console.error(error);
-      navigate('/404');
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { sender, recipient, ...rest } = invoice;
+
+    reset(rest);
   }
 
-  async function deleteInvoice(id: string | number, cb: () => void) {
+  async function handleDeleteInvoice(id: string) {
     try {
-      await ApiService.delete(`invoices/${id}`);
-      cb();
+      await deleteInvoice(id);
+      enqueueSnackbar('Invoice deleted', { variant: 'success' });
+      await refetch();
     } catch (error) {
       console.error(error);
       throw error;
@@ -170,7 +203,7 @@ export default function useInvoice() {
     fetchInvoice,
     onUpdate,
     setDates,
-    deleteInvoice,
+    handleDeleteInvoice,
     control,
     dates,
     items,

@@ -39,7 +39,7 @@ export interface Item {
   price: number | string;
 }
 export interface Invoice {
-  id: string | number;
+  id: string;
   number: string;
   createdDate: string | null;
   validDate: string | null;

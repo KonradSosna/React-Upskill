@@ -1,21 +1,18 @@
-/* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor, act } from '@testing-library/react';
 
 import App from './App';
 
 describe('Testin App component', () => {
   test('render Suspens component', () => {
-    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
-      render(<App></App>);
+      render(<App />);
     });
     expect(screen.getByText('loading...')).toBeInTheDocument();
   });
 
   test('render layout navigation', () => {
-    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
-      render(<App></App>);
+      render(<App />);
     });
     const invoicesLink = screen.getByText('INVOICES');
     const addNewInvoiceLink = screen.getByText('ADD NEW INVOICE');
@@ -26,9 +23,8 @@ describe('Testin App component', () => {
   });
 
   test('render table', async () => {
-    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
-      render(<App></App>);
+      render(<App />);
     });
 
     // TODO fix later

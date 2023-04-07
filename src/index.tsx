@@ -1,15 +1,14 @@
 import './i18n';
 
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 
 import { StyledEngineProvider } from '@mui/material';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = createRoot(document.getElementById('root')!);
-root.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
       <App />
