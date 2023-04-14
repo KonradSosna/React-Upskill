@@ -1,3 +1,5 @@
+import { useSnackbar } from 'notistack';
+
 import { Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
@@ -6,6 +8,7 @@ import useInvoice from '../hooks/useInvoice';
 import { Headers } from '../intefaces/invoices';
 import { invoicesApi } from '../store/store';
 import { createArrayFromNumber } from '../utils';
+import { useEffect } from 'react';
 
 const headers: Headers[] = [
   { name: 'No', align: 'inherit' },
@@ -23,7 +26,7 @@ const headers: Headers[] = [
   },
 ];
 
-const TableSkeleton = ({
+export const TableSkeleton = ({
   rows,
   columns,
 }: {
@@ -31,7 +34,7 @@ const TableSkeleton = ({
   columns: number;
 }) => {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} data-testid="table-skeleton">
       {createArrayFromNumber(columns).map((key: number) => (
         <Grid key={key} item xs={3}>
           {createArrayFromNumber(rows).map((col: number) => (
@@ -45,7 +48,20 @@ const TableSkeleton = ({
 
 export default function Home() {
   const { handleDeleteInvoice } = useInvoice();
-  const { data: invoices, isFetching } = invoicesApi.useGetInvoicesQuery();
+  const {
+    data: invoices,
+    isFetching,
+    error,
+  } = invoicesApi.useGetInvoicesQuery();
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar('There was an error while featching invoices', {
+        variant: 'error',
+      });
+    }
+  }, [error]);
 
   return (
     <>
@@ -56,6 +72,7 @@ export default function Home() {
           list={invoices}
           headers={headers}
           deleteInvoice={handleDeleteInvoice}
+          error={error}
         />
       )}
     </>

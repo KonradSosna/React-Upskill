@@ -189,7 +189,7 @@ export default function CreateInvoice() {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={formRef} data-testid="formSub">
       <Container>
         <Typography variant="h4">Form height: {formHeight} px</Typography>
         <Grid container spacing={4}>

@@ -43,25 +43,7 @@ export interface Invoice {
   number: string;
   createdDate: string | null;
   validDate: string | null;
-  recipient: {
-    companyName: string;
-    city: string;
-    street: string;
-    postcode: string;
-    nip: number | string;
-    phone: string;
-    email: string;
-    bankAccount: string;
-  };
-  sender: {
-    companyName: string;
-    city: string;
-    street: string;
-    postcode: string;
-    nip: number | string;
-    phone: string;
-    email: string;
-    bankAccount: string;
-  };
+  recipient: Recipient;
+  sender: Sender;
   items: Item[];
 }

@@ -7,7 +7,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AppSuspense from './components/atoms/AppSuspense';
 import DefaultLayout from './layout/Default';
-import { invoicesApi, store } from './store/store';
+import { TableSkeleton } from './pages/Invoices';
+import { invoicesApi, setupStore } from './store/store';
 
 const Invoices = lazy(() => import('./pages/Invoices'));
 const Create = lazy(() => import('./pages/Create'));
@@ -15,6 +16,7 @@ const Invoice = lazy(() => import('./pages/Invoice'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
+  const store = setupStore({});
   return (
     <ApiProvider api={invoicesApi}>
       <Provider store={store}>
@@ -34,7 +36,9 @@ function App() {
                   index
                   element={
                     <ErrorBoundary FallbackComponent={NotFound}>
-                      <Suspense fallback={<AppSuspense />}>
+                      <Suspense
+                        fallback={<TableSkeleton columns={4} rows={4} />}
+                      >
                         <Invoices />
                       </Suspense>
                     </ErrorBoundary>

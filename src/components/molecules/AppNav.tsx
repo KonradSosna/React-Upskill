@@ -93,6 +93,7 @@ export const AppNav: FC<AppNav> = ({ navigation }) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
+            data-testid="lng-switch"
           >
             {lang.name}
           </StyledButton>

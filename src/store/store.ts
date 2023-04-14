@@ -56,11 +56,26 @@ export const invoicesApi = createApi({
   }),
 });
 
-export const store = configureStore({
-  reducer: {
-    [invoicesApi.reducerPath]: invoicesApi.reducer,
-    invoiceList: invoiceSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(invoicesApi.middleware),
-});
+// export const store = configureStore({
+//   reducer: {
+//     [invoicesApi.reducerPath]: invoicesApi.reducer,
+//     invoiceList: invoiceSlice.reducer,
+//   },
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware().concat(invoicesApi.middleware),
+// });
+
+export const setupStore = (preloadedState: any) => {
+  return configureStore({
+    reducer: {
+      [invoicesApi.reducerPath]: invoicesApi.reducer,
+      invoiceList: invoiceSlice.reducer,
+    },
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+      }).concat(invoicesApi.middleware),
+  });
+};
